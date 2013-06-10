@@ -35,8 +35,9 @@ class Facilities(db.Model):
 class Violations(db.Model):
     violation_number = db.Column(db.Integer, primary_key=True)
     details = db.Column(db.Text)
-    def __init__(self, violation_number):
-        self.violation_number = violation_number 
+    def __init__(self, violation_number, details):
+        self.violation_number = violation_number
+        self.details = details 
 
         
 class Inspection(db.Model):

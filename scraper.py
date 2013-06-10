@@ -126,17 +126,15 @@ def update_create_inspection(record):
             
             violation_dictionary = {}
             violation_dictionary['violation_number'] = violation.split('.', 1)[0].strip()
-            new_inspection_violation, inspection_violation = get_or_create(db.session, Violations, violation_number=violation_dictionary['violation_number'])
-            inspection_violation.details = all_cap_to_sentence(violation.split('.', 1)[1].split('- Comments:', 1)[0].strip())
-            if violation not in seen_violations:
+            violation_dictionary['details'] = all_cap_to_sentence(violation.split('.', 1)[1].split('- Comments:', 1)[0].strip())
+            new_inspection_violation, inspection_violation = get_or_create(db.session, Violations, violation_number=violation_dictionary['violation_number'], details=violation_dictionary['details'])
+            if inspection_violation.violation_number not in seen_violations:
                 all_violations.append(inspection_violation)
-                seen_violations.append(violation)
+                seen_violations.append(inspection_violation.violation_number)
                 
         inspection.violations = all_violations
         inspection.comments = all_comments
         inspection.violations_count = len(all_violations)
-        
-    facility.inspections.append(inspection)
     
     if inspection not in facility.inspections:
         facility.inspections.append(inspection)
@@ -177,6 +175,8 @@ def scrape():
           update_create_inspection(record)
         break
 
+def create_db():
+	db.create_all()
 
 if __name__ == "__main__":
     scrape()
