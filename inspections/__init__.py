@@ -2,7 +2,8 @@ from flask import Flask, render_template
 from flask.ext.sqlalchemy import *
 from flask.ext.restless import APIManager
 
-app = Flask(__name__)
+application = Flask(__name__)
+app = application
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
