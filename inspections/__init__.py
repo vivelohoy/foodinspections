@@ -3,17 +3,17 @@ from flask.ext.sqlalchemy import *
 from flask.ext.restless import APIManager
 
 application = Flask(__name__)
-app = application
-app.config.from_object('config')
 
-db = SQLAlchemy(app)
-manager = APIManager(app, flask_sqlalchemy_db=db)
+application.config.from_object('config')
 
-@app.errorhandler(404)
+db = SQLAlchemy(application)
+manager = APIManager(application, flask_sqlalchemy_db=db)
+
+@application.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
 
-@app.template_filter('startswith')
+@application.template_filter('startswith')
 def startswith_filter(s, l):
     return s.startswith(l)
 
@@ -23,12 +23,12 @@ from inspections.branch.branchblueprint import branch_blueprint
 from inspections.resources.resourcesblueprint import resources_blueprint
 from inspections.search.searchblueprint import search_blueprint
 
-app.register_blueprint(violations_blueprint)
-app.register_blueprint(inspection_blueprint)
-app.register_blueprint(branch_blueprint)
-app.register_blueprint(resources_blueprint)
-app.register_blueprint(search_blueprint)
+application.register_blueprint(violations_blueprint)
+application.register_blueprint(inspection_blueprint)
+application.register_blueprint(branch_blueprint)
+application.register_blueprint(resources_blueprint)
+application.register_blueprint(search_blueprint)
 
 
 if __name__ == '__main__':
-    app.run()
+    application.run()
