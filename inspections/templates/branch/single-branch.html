@@ -1,0 +1,55 @@
+{% extends "single.html" %}
+
+{% block single_content %}
+<header>
+  <h2>{{ branch.branch_name }}</h2>
+</header>  
+	
+{% for facility in branch.facilities %}
+<div class="facility-info">
+  <h4>{{ facility.branch_name }} &raquo; {{ facility.address}}</h4>
+  {% for inspection in facility.inspections %}
+  <table class="table">
+    <thead>
+    <caption>Inspected on: <a href="{{ url_for('inspection_blueprint.show_inspection', id=inspection.inspection_id) }}">{{ inspection.inspection_date | replace("00:00:00", "") | replace("-", "/") }}</a></caption>
+    </thead>
+    <tbody>
+      <tr><td class="
+      {% if inspection.risk == 'Risk 1 (High)' %}
+        risk-high
+      {% elif inspection.risk == 'Risk 2 (Medium)' %}
+        risk-medium
+      {% elif inspection.risk == 'Risk 3 (Low)' %}
+        risk-low
+      {% endif %}">{{ inspection.risk }}</td></tr>
+      <tr><td>{{ inspection.inspection_date | replace("00:00:00", "") | replace("-", "/") }}</td></tr>
+      <tr><td>{{ inspection.inspection_type }}</td></tr>
+      <tr><td>{{ inspection.results }}
+      {% if inspection.results == "Pass" %}
+        <i class="icon-thumbs-up"></i>
+      {% elif inspection.results == "Fail" %}
+        <i class="icon-thumbs-down"></i>
+      {% endif %}</td></tr>
+
+      {% if inspection.comments|length > 0 %}
+      <tr><td><h5>Comments</h5>
+      {% for comment in inspection.comments %}
+      <tr><td>{{ comment.comment }}</td></tr>
+      {% endfor %}
+      </td></tr>
+      {% endif %}
+
+      {% if inspection.violations|length > 0 %}
+      <tr><td><h5>Violations</h5>
+      {% for violation in inspection.violations %}
+      <tr><td>{{ violation.violation_number }}. {{ violation.details }}</td></tr>
+      {% endfor %}
+      </td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+  {% endfor %}
+</div>
+{% endfor %}
+{% include "footer.html" %}
+{% endblock single_content %}

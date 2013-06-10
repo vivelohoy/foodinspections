@@ -1,0 +1,123 @@
+<script type="text/template" id="violation-template"> 
+  
+  <a href='http://localhost:5000/api/inspection?q={"filters":[{"name":"violations__violation_number","op":"any","val":<%= violation.violation_number%>}]}'><p class="violation-record" id="<%= violation.violation_number %>"> <%= violation.details %> </p></a>
+
+</script>
+
+
+<script>
+
+  var Violation = Backbone.Model.extend({
+    urlRoot: 'http://localhost:5000/api/violations'
+  });
+  var Violations = Backbone.Collection.extend({
+    model: Violation,
+    url: 'http://localhost:5000/api/violations',
+    violation_levels: function(){
+        var minors = this.groupBy(function(violation){
+            if (violation.get('violation_number') >= 30){
+                return "Minor";
+            }
+            else if (violation.get('violation_number') >= 15 && violation.get('violation_number') <= 29){
+                return "Serious";
+            }
+            else{
+                return "Critical";
+            }
+            
+        });
+        return minors;
+    },
+    parse: function(data){
+        return data.objects;
+    }
+  });
+  var SingleViolationView = Backbone.View.extend({
+    template: _.template($('#violation-template').html()),
+    initialize: function(){
+        this.render();
+    },
+    render: function(){
+        this.$el.html( this.template({violation: this.model.toJSON() }) );
+    }
+  });
+  var ViontationInpection = Backbone.Model.extend({
+    urlRoot: 'http://localhost:5000/api/inspection',
+
+  });
+
+  var ViontationInpections = Backbone.Collection.extend({
+    model: ViontationInpection,
+    parse: function(data){
+    }
+  });
+
+  var VioltaionsTab = Backbone.View.extend({
+    el: $('#violations-tab'),
+    render: function(){
+        var that = this;
+        this.$el.empty();
+        this.collection.each(function(violation){
+            var violationItem = new SingleViolationView({model: violation});
+            that.$el.append( violationItem.$el.html() );
+        });
+    },
+    events: {
+        'click .violation-record': 'openViolation'
+    },
+    openViolation: function(violationClicked){
+        // ?q={"filters":}
+        var violation_number = violationClicked.target.id;
+    }
+  });
+
+  var AppRouter = Backbone.Router.extend({
+    initialize: function(options){
+        this.collection = options.collection;
+        var that = this
+        this.collection.fetch({
+            success: function(){
+                console.log("Sucess");
+                that.criticals = that.collection.violation_levels()['Critical'];
+                that.serious = that.collection.violation_levels()['Serious'];
+                that.minors = that.collection.violation_levels()['Minor'];
+                Backbone.history.start();
+            }
+        });
+
+    },
+    routes: {
+        '': 'index',
+        'Critical': 'showCriticals',
+        'Serious': 'showSerious',
+        'Minor': 'showMinors',
+        'violation/:id': "showThisViolation"
+    },
+    showThisViolation: function(id){
+        data_url = 'http://localhost:5000/api/inspection?q={"filters":[{"name":"violations__violation_number","op":"any","val":'+id+'}]}';
+        console.log(data_url);
+    },
+    showCriticals: function(){
+        var violations = new Violations(this.criticals);
+        var violationTab = new VioltaionsTab({collection: violations});
+        violationTab.render();
+    },
+    showSerious: function(){
+        var violations = new Violations(this.serious);
+        var violationTab = new VioltaionsTab({collection: violations});
+        violationTab.render();
+    },
+    showMinors: function(){
+        var violations = new Violations(this.minors);
+        var violationTab = new VioltaionsTab({collection: violations});
+        violationTab.render();
+    },
+    index: function(){
+        this.navigate('Critical', {trigger: true});
+    }
+  });
+  var violations = new Violations();
+  
+  var router = new AppRouter({collection: violations});
+
+</script>

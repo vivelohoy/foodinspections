@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <h1>Categories</h1>
+	<ul class="inspection-data-container">
+	{% for category in categories %}
+	  <a href="#{{ category }}">{{ category }} - </a>
+	{% endfor %}
+	{% for category in categories %}
+	  <h2 id="{{ category }}">{{ category }}</a></h2>
+		{% for inspection in inspections %}
+		  {% if inspection.facilities.facility_type == category %}
+				<li class="inspection-card">
+				  <div class="inspection-card-content">
+					  <h3><a href="inspections/{{ inspection.inspection_id }}">{{ inspection.facilities.dba_name }}</a></h3>
+					  <p>Risk: {{ inspection.risk }}</p>
+					  <p>Inspection Date: {{ inspection.inspection_date.date() }}</p>
+					  <p>Facility Type: {{ inspection.facility_type }}</p>
+					  <p>Address: {{ inspection.address }}</p>
+					  <p>Zip: {{ inspection.zip }}</p>
+					  <p>Results: {{ inspection.results }}</p>
+				  </div>
+				</li>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+	</ul>
+</div>
+{% endblock content %}

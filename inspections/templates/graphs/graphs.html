@@ -1,0 +1,220 @@
+{% extends "single.html" %}
+{% block single_content %}
+
+  
+<div id="passfail"></div>
+<div id="passfail-logan"></div>
+<div id="risk"></div>
+<script type="text/javascript" src="{{ url_for('static', filename='js/highcharts.js') }}"></script>
+<script type="text/javascript"
+src="https://maps.googleapis.com/maps/api/js?sensor=false">
+</script>
+
+<div id="pass-map" style=" height:450px; width:50%; "></div>
+<div id="fail-map" style=" height:450px; width:50%; "></div>
+<script>	
+	var pass_fail_chart;
+	var risks;
+	
+	var data_url = 'http://localhost:5000/api/inspection?q={"order_by":[{"field":"inspection_date","direction":"desc"}],"limit":0}'; 
+
+	    pass_fail_chart = new Highcharts.Chart({
+	    	chart: {
+	    		renderTo: 'passfail'
+	    	},
+    		title: {
+    			text: 'Pass and Fail Inspections'
+    		},
+    		plotOptions:{
+    			pie: {
+    				animation: {
+    					duration: 1000 * 1
+    				},
+
+    			}
+    		},
+    		series: [{
+    			type: 'pie',
+    			name: 'Results',
+    			data: []
+    		}]
+	    });
+	    
+		pass_fail_chart_logan = new Highcharts.Chart({
+	    	chart: {
+	    		renderTo: 'passfail-logan'
+	    	},
+    		title: {
+    			text: 'Pass and Fail Inspections Logan Square'
+    		},
+    		plotOptions:{
+    			pie: {
+    				animation: {
+    					duration: 1000 * 1
+    				},
+
+    			}
+    		},
+    		series: [{
+    			type: 'pie',
+    			name: 'Results',
+    			data: []
+    		}]
+	    });
+
+
+
+	    risks = new Highcharts.Chart({
+	    	chart: {
+	    		renderTo: 'risk'
+	    	},
+    		title: {
+    			text: 'Food Risks'
+    		},
+    		plotOptions:{
+    			pie: {
+    				animation: {
+    					duration: 1000 * 1
+    				},
+
+    			}
+    		},
+    		series: [{
+    			type: 'pie',
+    			name: 'results',
+    			data: []
+    		}]
+	    });
+
+	$.getJSON(data_url,
+		function(data, textStatus, jqXHR){
+			var passed = 0;
+			var failed = 0;
+			var passed_conditions = 0;
+			var other = 0;
+			var closed = 0;
+			var unknown = 0;
+
+			var high = 0;
+			var low = 0;
+			var med = 0;
+			var otherRisk = 0;
+			data = data.objects;
+			$.each(data, function(index, value){
+				if (value.results == 'Pass'){
+					passed = passed + 1;
+				}
+				else if (value.results == 'Fail'){
+					failed = failed + 1;
+				}
+				else if (value.results == 'Pass w/ Conditions'){
+					passed_conditions = passed_conditions + 1;
+				}
+				else if (value.results == 'Out of Business') {
+					closed = closed + 1;
+				}
+				else if (value.results == 'No Entry') {
+					unknown = unknown + 1;
+				}
+				else{
+					other = other + 1;
+					//console.log(value.results);
+				}
+
+				if (value.risk == 'Risk 1 (High)'){
+					high = high + 1;
+				}
+				else if (value.risk == 'Risk 2 (Medium)'){
+					med = med + 1;
+				}
+				else if (value.risk == 'Risk 3 (Low)'){
+					low = low + 1;
+				}
+				else {
+					otherRisk = otherRisk + 1;
+					//console.log(value.risk);
+				}
+			});
+
+			pass_fail_chart.series[0].addPoint(['Passed', passed]);
+			pass_fail_chart.series[0].addPoint(['Failed', failed]);
+			pass_fail_chart.series[0].addPoint(['Passed With Conditions', passed_conditions]);
+			pass_fail_chart.series[0].addPoint(['Out Of Business', closed]);
+			pass_fail_chart.series[0].addPoint(['No Entries', unknown]);
+			pass_fail_chart.series[0].addPoint(['Other', other]);
+
+			risks.series[0].addPoint(['Low', low]);
+			risks.series[0].addPoint(['High', high]);
+			risks.series[0].addPoint(['Medium', med]);
+	});
+	
+	//60614, 60618, 60622, 60639, 60647
+	lg_url = 'http://localhost:5000/api/facilities?q={"limit":500}'
+	//q={"filter":{"name":"zip", "op":"==","val":60647}}'
+	$.getJSON(lg_url,
+		function(data, textStatus, jqXHR){
+			console.log(data);
+			data = data.objects;
+			var passed =0;
+			var failed =0;
+			$.each(data, function(index, value){
+				$.each(value.inspections, function(index, inspection){
+					console.log(inspection.results);
+					if (inspection.results == 'Pass'){
+						passed = passed + 1;
+					}
+					else if (inspection.results == 'Fail'){
+						failed = failed + 1;
+					}
+				});
+			});
+			pass_fail_chart.series[0].addPoint(['Passed', passed]);
+			pass_fail_chart.series[0].addPoint(['Failed', failed]);
+
+			
+		});
+	
+	var facilities_url = 'http://localhost:5000/api/facilities?q={"limit":2000}';
+	/*$.getJSON(facilities_url,
+		function(facilities, textStatus, jqXHR){
+		initialize(facilities.objects);
+	});*/
+	
+ 	function initialize(data) {
+		var mapOptions = {
+			center: new google.maps.LatLng(41.73585957574674, -87.58577161179068),
+			zoom: 15,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+	  };
+
+		var pass_map = new google.maps.Map(document.getElementById("pass-map"),
+			mapOptions);
+		var fail_map = new google.maps.Map(document.getElementById("fail-map"),
+			mapOptions);
+
+		console.log(data.length)
+		$.each(data, function(index, facility){
+			var point = new google.maps.LatLng(facility.latitude, facility.longitude);
+			var marker = new google.maps.Marker({ position: point });		
+			pass_c = 0;
+			fail_c = 0;
+			$.each(facility.inspections, function(index, inspection){
+				if (inspection.results === 'Pass'){ pass_c++; }
+				else if (inspection.results == 'Fail'){ fail_c++; }
+			});
+			var point = new google.maps.LatLng(facility.latitude, facility.longitude);
+			var marker = new google.maps.Marker({ position: point });
+			if (fail_c > pass_c){
+				var image = 'http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png';
+				marker.setIcon(image);
+				marker.setMap(fail_map);
+			}
+			else if (pass_c > fail_c){
+				marker.setMap(pass_map);
+			}
+		});
+		
+	  }
+</script>
+{% include "footer.html" %}
+{% endblock single_content %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% include "header.html" %} 
+{% include "js-header.html" %}
+{% block header %} {% endblock %}
+</head>
+<body>
+{% include "nav-bar.html" %}
+
+{% block navigation_bar %} {% endblock navigation_bar %}
+{% block content %} {% endblock content %}
+
+{% block footer %}  {% endblock footer %}
+
+</body>
+</html>

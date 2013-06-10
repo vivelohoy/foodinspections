@@ -1,0 +1,180 @@
+body {
+   padding-bottom: 5px;
+   margin-top: 10px;
+}
+a {
+	text-decoration: none;
+	color: #bd0505;
+	transition: color .4s ease;
+}
+
+a:link {
+	text-decoration:none;
+}
+a:visited {
+	text-decoration:none;
+	color: #831717;
+}
+a:hover {
+	text-decoration:none;
+	color: #f43535;
+}
+a:active {
+	text-decoration:none; 
+}
+.table-header{
+  margin: 0px 0px 4px 0px;
+  padding: 4px 0px 7px 0px;
+}
+.table{
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+} 
+
+.table th, .table td {
+  padding: 8px;
+}
+
+.table th {
+  text-align: center;
+}
+.inspection-data ul {
+	list-style-type:none;
+	margin: 0px;
+	padding: 0px;
+}
+.inspection-data li {
+	display: inherit;
+	margin: 0px;
+	padding: 0px;
+}
+.risk-high {
+	color: #c43108;
+}
+.risk-medium {
+	color: #d77905;
+}
+
+.risk-low {
+	color: #63db0e;
+}
+
+.no-next-prev{
+    color: #404040
+}
+.not-displayed {
+	display: none;
+}
+.div-table{
+	min-height: min-intrinsic;
+}
+
+.table{
+	width: 70%;
+}
+
+.inspection-data-container{
+	margin: 0px;
+	padding: 7px 10px 5px 0px;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline;
+}
+
+.inspection-card {
+	list-style: none;
+	padding: 6px 6px 6px 6px;
+	margin: 6px 7px 7px 14px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+.inspection-card div h3{
+  background-color: #fbc9c9;
+  text-align: center;
+}
+.inspection-card div {
+	text-align: center;
+}
+
+.inspection-card-content{
+	background-color: #ebebeb;
+}
+
+.facility-info{
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: solid #5d5d5d;
+}
+div.facility-info table thead th{
+  text-align: center;
+}
+
+a.no-color-link {
+	text-decoration: none;
+	color: #060505;
+	transition: color .4s ease;
+}
+
+.highlight{
+	background-color: #FFFB00;
+}
+
+.floatleft {
+  float: left;
+  margin: 0;
+  padding: 0;
+  width: 33.333%;
+  /* Remove when add content */
+  margin-bottom: 200px;
+}
+
+.clear {clear:both}
+
+@media only screen
+and (max-width:729px) {
+   .floatleft {
+     float:none;
+     padding-left:0;
+     padding-right:0;
+     padding-top:1em;
+     width:100%;
+   }
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+
+	#inspection-data {
+		width: 100%;
+	}
+	#inspection-data tr, td{
+		display: block;
+	}
+	
+	#inspection-data th{
+		display: none;
+	}
+	
+	.table-header {
+	  text-align: center;		
+	}
+	th{
+		display: none;
+	}
+	
+}
+#git-image{
+	width: 10%;
+}
+
+.not-found{
+	font-size: 150px;
+	margin-top: 60px;
+	margin-bottom: 60px;
+	text-shadow: 4px 4px #686262;
+}

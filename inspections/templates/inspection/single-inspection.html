@@ -1,0 +1,86 @@
+{% extends "single.html" %}
+{% block single_content %}
+	<h1>{{ inspection.facility_id }}</h1>
+	<h3>{{ inspection.facilities.city }}, {{ inspection.facilities.state }}, {{ inspection.facilities.zip }}, {{ inspection.facilities.address }}</h3>
+	<ul class="inspection-data">
+	  <li><p>Inspection Type: {{ inspection.inspection_type }}</p></li>
+	  <li>
+	    <p>Evaluated Risk:
+	      <strong class="
+	        {% if inspection.risk == 'Risk 1 (High)' %}
+	          risk-high
+	        {% elif inspection.risk == 'Risk 2 (Medium)' %}
+	          risk-medium
+	        {% elif inspection.risk == 'Risk 3 (Low)' %}
+	          risk-low
+	        {% endif %}
+	      ">{{ inspection.risk }}</strong>
+	    </p>
+	  </li>
+	  <li><p>Inspection Results: {{ inspection.results }}
+	    {% if inspection.results == "Pass" %}
+	      <i class="icon-thumbs-up"></i>
+	    {% elif inspection.results == "Fail" %}
+	      <i class="icon-thumbs-down"></i>
+	    {% endif %}
+	  </p></li>
+	  <li><p>Inspection Date: {{ inspection.inspection_date.date() }}</p></li>
+	  <li><p>Facility Type: {{ inspection.facilities.facility_type }} <a id="about-facility-type" rel="popover" data-content="Information About this facility type  Information About this facility type" data-facility-type="{{ inspection.facilities.facility_type }}" data-trigger="hover click" data-original-title="Facility Type Title" data-placement="bottom"><i class="icon-info-sign"></i></a></p></li>
+	</ul>
+	{% if inspection.comments|length > 0 %}
+	<h3>Comments</h3>
+	  <ul class="inspection-data">
+		  {% for comment in inspection.comments %}
+	      <li><p>{{ comment.comment }}</p></li>
+	    {% endfor %}
+	  </ul>
+	{% endif %}
+
+	{% if inspection.violations|length > 0 %}
+	<h3>Violations</h3>
+	  
+	    {% for violation in inspection.violations %}
+	         <a href="{{ url_for( 'violations_blueprint.show_single_violation', violation_number=violation.violation_number )}}">
+	           #{{ violation.violation_number }} {{ violation.comment }}
+	         </a>	       
+	    {% endfor %}
+	{% endif %}
+	  
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Inspection Info Title</h3>
+  </div>
+  <div class="modal-body">
+    <p>Inspection Info paragraphs…</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">OK</button>
+  </div>
+</div>
+
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+
+	<script>
+			
+	    $(document).ready(function(){
+		    $("#about-inspection-type").hover(
+		      function(){ 
+		        $(this).popover();
+		      }
+		    );
+		    
+		    $("#about-facility-type").hover(
+		      function(){ 
+		        $(this).popover();
+		      }
+		    );
+	    });
+	    	    
+	</script>
+{% include "footer.html" %}
+{% endblock single_content %}
+
+
+

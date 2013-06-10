@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+    <!--Sidebar content-->
+    </div>
+    <div class="span8">
+    <!--Body content-->
+    {% block single_content %} {% endblock single_content %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

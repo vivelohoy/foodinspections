@@ -1,0 +1,65 @@
+    
+<!--
+    <div class="container">
+			<table id="inspection-data" class="table table-bordered table-striped table-condensed">
+			  <caption class="table-header"><h1>Food Inspections</h1></caption>
+				<thead>
+					<tr>
+			      <th>Restaurant Name 
+			        <div class="btn-toolbar">
+			          <div class="btn-group">
+			            <button class="btn btn-mini btn-sort">⬆</button>
+			            <button class="btn btn-mini btn-sort">⬇</button>
+			          </div>
+			        </div>
+			      </th>
+			      <th>Risk Level
+			        <div class="btn-toolbar">
+			          <div class="btn-group">
+			            <button class="btn btn-mini btn-sort">⬆</button>
+			            <button class="btn btn-mini btn-sort">⬇</button>
+			          </div>
+			        </div>
+			      </th>
+			      <th>Inspection Date
+			        <div class="btn-toolbar">
+			          <div class="btn-group">
+			            <button class="btn btn-mini btn-sort">⬆</button>
+			            <button class="btn btn-mini btn-sort">⬇</button>
+			          </div>
+			        </div>
+			      </th>
+				  <th>Results
+			        <div class="btn-toolbar">
+			          <div class="btn-group">
+			            <button class="btn btn-mini btn-sort">⬆</button>
+			            <button class="btn btn-mini btn-sort">⬇</button>
+			          </div>
+			        </div>
+			      </th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for inspection in inspections.items %}
+					  <tr>
+						  <td><a href="{{ url_for('inspection_blueprint.show_inspection', id=inspection.inspection_id) }}">{{ inspection.facilities.aka_name }}</a></td>
+						  <td>{{ inspection.risk }}</td>
+						  <td>{{ inspection.inspection_date.date() }}</td>
+						  <td>{{ inspection.results }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+				<div class="container control-btns">
+		    {% if inspections.has_prev %}
+	        <a href="{{ url_for('inspection_blueprint.inspection_data', page = inspections.prev_num) }}"><button class="btn">Back</button></a>
+	      {% else %}
+	        <button class="btn disabled">Back</button>
+	      {% endif %}
+	      {% if inspections.has_next %}
+	        <a href="{{ url_for('inspection_blueprint.inspection_data', page = inspections.next_num) }}"><button class="btn">Next</button></a>
+	      {% else %}
+	        <button class="btn disabled">Next</button>
+	      {% endif %}
+				</div>	
+			</table>
+-->
