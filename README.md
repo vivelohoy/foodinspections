@@ -9,7 +9,7 @@ Installation
     git clone https://github.com/vivelohoy/foodinspections.git
     cd /path/to/foodinspections
     pip install -r requirements.txt 
-    python run.py
+    python application.py
     
 You should now see something like:
 
@@ -21,11 +21,9 @@ To fix this problem first we stop our server.
 
     Note: To stop the server you can always press ctrl+c
     
-Now run python in interactive mode:
+Now run: 
 
-    python
-    >>> from scraper import create_db
-    >>> create_db()
+    python createdb.py
     
 The database has been created and you are ready to scrape:
 
@@ -33,4 +31,4 @@ The database has been created and you are ready to scrape:
     
 After a couple of hours you should have the database with all the records. You can though not recommended hit ctrl+c during the scrape to finish the script prematurely and start looking at some data.
 
-After finishing the scrape run python run.py again and have fun.
+After finishing the scrape run python application.py again and have fun.
