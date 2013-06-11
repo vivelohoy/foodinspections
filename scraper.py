@@ -5,7 +5,6 @@ from inspections.models.models import *
 
 API_ENDPOINT = "http://data.cityofchicago.org/resource/4ijn-s7e5.json"
 API_LIMIT = 1000
-LOWEST_OFFSET = 61917
 
 
 def extract_string(data, data_query, keys):
@@ -164,16 +163,17 @@ def scrape():
     parameters = {}
     parameters['$limit'] = 1000
     parameters['$offset'] = 0
-    while (parameters['$offset'] <= LOWEST_OFFSET ):
+    while (True):
         data = requests.get(API_ENDPOINT, params=parameters)
         if data.status_code != requests.codes.ok:
-            return render_template('no-data.html')
+			return
         json_data = json.loads(data.content)
+        if len(json_data) == 0:
+            break
         parameters['$offset'] += 1000
         print "Fetched", data.url
         for record in json_data:
           update_create_inspection(record)
-        break
 
 def create_db():
 	db.create_all()
