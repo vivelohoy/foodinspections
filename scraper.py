@@ -166,7 +166,7 @@ def scrape():
     while (True):
         data = requests.get(API_ENDPOINT, params=parameters)
         if data.status_code != requests.codes.ok:
-			return
+            return
         json_data = json.loads(data.content)
         if len(json_data) == 0:
             break
