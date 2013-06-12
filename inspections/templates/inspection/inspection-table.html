@@ -64,7 +64,7 @@
 	});
 	
 	var Inspections = Backbone.Collection.extend({
-	    url:'http://localhost:5000/api/inspection?q={"order_by":[{"field":"inspection_date","direction":"desc"}],"limit":50}',
+	    url:'/api/inspection?q={"order_by":[{"field":"inspection_date","direction":"desc"}],"limit":50}',
 	    model:Inspection, 
 	    parse: function(response){
 	    	response = response.objects;
