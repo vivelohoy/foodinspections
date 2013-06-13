@@ -1,0 +1,11 @@
+{
+    "objects":[{% for inspection in inspections %}
+        {
+                "inspection_id": {{ inspection.inspection_id }},
+                "results": "{{ inspection.results }}",
+                "inspection_date": "{{ inspection.inspection_date }}",
+                "risk": "{{ inspection.risk }}",
+                "facility_id": "{{ inspection.facility_id }}"
+        }{% if not loop.last %},{% endif %}{% endfor %}
+    ]
+}

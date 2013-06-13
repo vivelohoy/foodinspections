@@ -1,9 +1,15 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, make_response
 from inspections.models.models import *
 
 INSPECTIONS_PER_PAGE = 100
 inspection_blueprint = Blueprint("inspection_blueprint", __name__)
 
+@inspection_blueprint.route('/api/data')
+def return_data():
+    inspections = Inspection.query.order_by(Inspection.inspection_date.desc()).limit(100).all()
+    resp = make_response(render_template('inspection/inspectionjson.html', inspections=inspections))
+    resp.headers['Content-Type'] = 'application/json'
+    return resp
 
 @inspection_blueprint.route('/')
 @inspection_blueprint.route('/inspections')
