@@ -50,7 +50,7 @@
 
 <script type="text/template" id="inspection-record">
 	<tr>
-      <td><a class="inspection-link" href="http://localhost:5000/inspections/<%= inspection.inspection_id %>" ><%= inspection.facility_id %></a></td>
+      <td><a class="inspection-link" href="inspections/<%= inspection.inspection_id %>" ><%= inspection.facility_id %></a></td>
       <td><%= inspection.risk %></td>
       <td><%= inspection.inspection_date.replace('00:00:00', '') %></td>
       <td><%= inspection.results %></td>
