@@ -1,7 +1,7 @@
 {% extends "single.html" %}
 {% block single_content %}
 	<h1>{{ inspection.facility_id }}</h1>
-	<h3>{{ inspection.facilities.city }}, {{ inspection.facilities.state }}, {{ inspection.facilities.zip }}, {{ inspection.facilities.address }}</h3>
+	<h3>{{ inspection.facilities.address }}, {{ inspection.facilities.city }}, {{ inspection.facilities.state }}, {{ inspection.facilities.zip }}</h3>
 	<ul class="inspection-data">
 	  <li><p>Inspection Type: {{ inspection.inspection_type }}</p></li>
 	  <li>
@@ -79,7 +79,6 @@
 	    });
 	    	    
 	</script>
-{% include "footer.html" %}
 {% endblock single_content %}
 
 
