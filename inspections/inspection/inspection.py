@@ -11,7 +11,6 @@ def return_data():
     resp.headers['Content-Type'] = 'application/json'
     return resp
 
-@inspection_blueprint.route('/')
 @inspection_blueprint.route('/inspections')
 def inspection_data():
     return render_template('inspection/inspection-table.html')

@@ -124,11 +124,16 @@ a.no-color-link {
 .floatleft {
   float: left;
   margin: 0;
-  padding: 0;
-  width: 33.333%;
+
+  padding: 10px;
+  width: 29.0%;
   /* Remove when add content */
   margin-bottom: 200px;
 }
+.floatleft h2{
+    text-align: center;
+}
+
 
 .clear {clear:both}
 
@@ -168,8 +173,18 @@ only screen and (max-width: 760px),
 	}
 	
 }
-#git-image{
-	width: 10%;
+.small-image{
+	width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+#footer div a h2{
+    color: #4D4D4D;
+
 }
 
 .not-found{
@@ -178,3 +193,22 @@ only screen and (max-width: 760px),
 	margin-bottom: 60px;
 	text-shadow: 4px 4px #686262;
 }
+#home-search div input {
+    
+}
+.home h1, p{
+    text-align: center;
+}
+.home form {
+}
+
+.input-append {
+    margin-left: 35%;
+}
+.input-append input{
+    width: 100%;
+}
+.input-append button{
+}
+
+

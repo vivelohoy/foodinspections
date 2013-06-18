@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container home">
+    <h1>Chicago Food Inpsections</h1>
+
+    <p class="lead">There has been {{ total }} food inspections in total since January 1, 2010. In the last week, <i>{{ passed }}</i> establishments passed, <i>{##}</i> and <i>{{ failed }}</i> failed!</p>
+    <form class="form-search" action="{{ url_for('search_blueprint.search') }}" method="post">
+        <div id="home-search">
+            <div class="input-append">
+                <input placeholder="Search by name, keyword or zipcode..."  name="main-data"  class="span2" id="appendedInputButton" type="text">
+                <button class="btn btn-danger" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <div class="container-fluid">
+        
+    </div>
+
+</div>
+{% include "footer.html" %}
+{% endblock content %}

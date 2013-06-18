@@ -2,7 +2,7 @@
 <div class="container">
   <div class="navbar">
     <div class="navbar-inner">
-      <a class="brand" href="{{ url_for('inspection_blueprint.inspection_data') }}">Food Inspections</a>
+      <a class="brand" href="{{ url_for('home_blueprint.show_home') }}">Food Inspections</a>
       <ul class="nav">
         <!-- <li><a href="">Inspections</a></li> -->
         <li><a href="{{ url_for('violations_blueprint.show_violations') }}">Violations</a></li>
@@ -13,7 +13,7 @@
         <li>
   <form class="navbar-form" action="{{ url_for('search_blueprint.search') }}" method="post">
     <div>
-    <input type="text" placeholder="Search by name, zip code keyword..." name="main-data" class="input-medium search-query">
+    <input type="text" placeholder="Search by name, keyword or zipcode..." name="main-data" class="input-medium search-query">
     <button type="submit" class="btn"><i class="icon-search"></i></button>
     </div>
   </form>
