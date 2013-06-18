@@ -187,19 +187,15 @@ only screen and (max-width: 760px),
 
 }
 
+#footer p, #footer h1 {
+    text-align: center;
+}
+
 .not-found{
 	font-size: 150px;
 	margin-top: 60px;
 	margin-bottom: 60px;
 	text-shadow: 4px 4px #686262;
-}
-#home-search div input {
-    
-}
-.home h1, p{
-    text-align: center;
-}
-.home form {
 }
 
 .input-append {
@@ -208,7 +204,4 @@ only screen and (max-width: 760px),
 .input-append input{
     width: 100%;
 }
-.input-append button{
-}
-
 

@@ -36,17 +36,19 @@ def search():
             search_keyword = '%' + search_keyword + '%'
             all_results = {}
 
-            zip_codes = search_zip(search_keyword)
-            
-            if zip_codes:
-                return render_template('search/results.html', results=zip_codes, searched=original_search)
-
             search_results = Branches.query.filter(Branches.branch_name.like(search_keyword))
             search_comments_results = InspectionComments.query.filter(InspectionComments.comment.like(search_keyword))
 
             all_results['branches'] = search_results.all()
             all_results['comments'] = search_comments_results.all()
-            return render_template('search/results.html', results=all_results, searched=original_search)
+            if all_results['branches'] or all_results['comments']:
+                return render_template('search/results.html', results=all_results, searched=original_search)
+                
+            else:
+                zip_codes = search_zip(search_keyword)
+            
+                if zip_codes:
+                    return render_template('search/results.html', results=zip_codes, searched=original_search)
         else: 
             return render_template('search/no-search.html')
     else:
