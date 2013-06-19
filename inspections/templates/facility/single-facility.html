@@ -1,0 +1,13 @@
+{% extends "single.html" %}
+{% import 'macros.html' as macros with context %}
+
+{% block single_content %}
+<header>
+  <h2>{{ facility.branch_name }}</h2>
+</header>  
+	
+{% for inspection in facility.inspections %}
+ {{ macros.inspection(inspection) }}
+
+{% endfor %}
+{% endblock single_content %}

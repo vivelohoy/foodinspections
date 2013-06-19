@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <p>
+    {% for letter in abc %}
+    <a href="#{{ letter }}">{{ letter }}</a>
+    {% endfor %}
+  </p>
+  {% for letter in abc %}
+  <h3><a name="{{ letter }}" class="no-color-link">{{ letter }}</a></h3>
+  {% for branch in branches %}
+  {% if branch.branch_name|startswith(letter) %}
+  <a href="{{ url_for('branch_blueprint.show_branch', branch_name=branch.branch_name) }}"><p>{{ branch.branch_name }}</p></a>
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+</div>
+{% endblock content %}

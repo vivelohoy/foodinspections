@@ -1,0 +1,135 @@
+
+
+{% macro inspection_info(inspection) -%}
+
+<div class="accordion" id="accordion">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse">
+            <p>Inspection Results: {{ inspection.results }}
+                {% if inspection.results == "Pass" %}
+                    <i class="icon-thumbs-up"></i>
+                {% elif inspection.results == "Fail" %}
+                  <i class="icon-thumbs-down"></i>
+                {% endif %}
+            </p>
+          </a>
+        </div>
+        <div id="collapse" class="accordion-body collapse in">
+          <div class="accordion-inner">
+            <ul class="inspection-data">
+              <li><p>Inspection Type: {{ inspection.inspection_type }}</p></li>
+              <li>
+                <p>Evaluated Risk:
+                  <strong class="
+                    {% if inspection.risk == 'Risk 1 (High)' %}
+                      risk-high
+
+                    {% elif inspection.risk == 'Risk 2 (Medium)' %}
+                      risk-medium
+                    {% elif inspection.risk == 'Risk 3 (Low)' %}
+                      risk-low
+                    {% endif %}
+                  ">{{ inspection.risk }}</strong>
+                </p>
+              </li>
+              <li><p>Inspection Date: {{ inspection.inspection_date.date() }}</p></li>
+              <li><p>Facility Type: {{ inspection.facilities.facility_type }} <a id="about-facility-type" rel="popover" data-content="Information About this facility type  Information About this facility type" data-facility-type="{{ inspection.facilities.facility_type }}" data-trigger="hover click" data-original-title="Facility Type Title" data-placement="right"><i class="icon-info-sign"></i></a></p></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{%- endmacro %}
+
+{% macro inspection_comments(comments) -%}
+
+<div class="accordion" id="accordion2">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionComments" href="#collapseComments">
+        Comments
+      </a>
+    </div>
+    <div id="collapseComments" class="accordion-body collapse">
+      <div class="accordion-inner">
+          <ul class="inspection-data">
+              {% if comments|length > 0 %}
+              {% for comment in comments %}
+              <li><p>{{ comment.comment }}</p></li>
+              {% endfor %}
+              {% else %}
+              <li><p>No Comments.</p></li>
+              {% endif %}
+          </ul>
+      </div>
+    </div>
+  </div>
+
+
+{%- endmacro %}
+
+{% macro violations(violations) -%}
+    <div class="container" id="violations-container">
+      <ul class="nav nav-tabs">
+        <li class="level active"><a data-level="#Critical">Critical Violations</a></li>
+          
+        <li class="level"><a data-level="#Serious" >Serious Violations</a></li>
+        
+        <li class="level"><a data-level="#Minor">Minor Violations</a></li>
+      </ul>
+      <div id="Critical">
+        <h2>Critical</h2>
+        {% for violation in violations %}
+        {% if violation.violation_number <= 14 %}
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
+        {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="not-displayed" id="Serious">
+        <h2>Serious</h2>
+        {% for violation in violations %}
+        {% if violation.violation_number >= 15 and violation.violation_number <= 29 %}
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
+        {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="not-displayed" id="Minor">
+        <h2>Minor</h2>
+        {% for violation in violations %}
+        {% if violation.violation_number >= 30 %}
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+          $('.level').click(function(clicked){
+            var unWantedLevel = $('.active').children('a').attr('data-level');
+            $(unWantedLevel).addClass('not-displayed');
+            var wantedLevel = $(this).children('a').attr('data-level');
+            $(wantedLevel).removeClass('not-displayed');
+
+            $('.active').removeClass('active');
+            $(this).addClass('active');
+          });
+        });
+    </script>
+
+{%- endmacro %}
+
+{% macro inspection(inspection) -%}
+	<h3>{{ inspection.facilities.address }}, {{ inspection.facilities.city }}, {{ inspection.facilities.state }}, {{ inspection.facilities.zip }}</h3>
+    
+    {{ inspection_info(inspection) }}
+
+    {{ inspection_comments(inspection.comments) }}
+
+    {{ violations(inspection.violations) }}
+
+{%- endmacro %}
