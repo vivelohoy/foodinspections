@@ -31,6 +31,10 @@ application.register_blueprint(resources_blueprint)
 application.register_blueprint(search_blueprint)
 application.register_blueprint(home_blueprint)
 
+from models.models import *
+
+api_branches_names_blueprint = manager.create_api(Branches, methods=['GET'], include_columns=['branch_name'], collection_name='branch_names', results_per_page=None)
+
 
 if __name__ == '__main__':
     application.run()

@@ -49,6 +49,8 @@ def search():
             
                 if zip_codes:
                     return render_template('search/results.html', results=zip_codes, searched=original_search)
+                else: 
+                    return render_template('search/no-search.html')
         else: 
             return render_template('search/no-search.html')
     else:

@@ -1,24 +1,17 @@
 <div id="footer" class="container">
     <div class="floatleft">
-        <a href="{{ url_for('violations_blueprint.show_violations') }}">
             <h2>Violations</h2>
-            <img class="small-image" src="{{ url_for('static', filename='img/violations.png') }}" /></a>
             <p><i>See what the city of Chicago considers violations and a list of restaurants who violated them.</i></p>
 
     </div>
 
     <div class="floatleft">
-        <a href="{{ url_for('resources_blueprint.show_resources') }}"><h2>Resources</h2>
-            <img style=" 
-                width: 45%;
-                 " class="small-image" src="{{ url_for('static', filename='img/git.png') }}" /></a>
+        <h2>Resources</h2>
         <p><i>Find out more about the data and how the app works</i></p>
     </div>
 
     <div class="floatleft">
-        <a href="{{ url_for('inspection_blueprint.inspection_data') }}">
             <h2>Inspections</h2>
-            <img class="small-image" src="{{ url_for('static', filename='img/inspections.png') }}" /></a>
             <p><i>See the latests food inspections in Chicago and their results.</i></p>
 
     </div>

@@ -195,11 +195,3 @@ only screen and (max-width: 760px),
 	margin-bottom: 60px;
 	text-shadow: 4px 4px #686262;
 }
-
-.input-append {
-    margin-left: 35%;
-}
-.input-append input{
-    width: 100%;
-}
-
