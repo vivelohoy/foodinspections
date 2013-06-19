@@ -1,56 +1,11 @@
 {% extends "base.html" %} 
+{% from 'macros.html' import violations as violations_template %}
 
 {% block content %}
-<div class="container" id="violations-container">
-  <h3> All Violations</h3>
-  <ul class="nav nav-tabs">
-    <li class="level active"><a data-level="#Critical">Critical Violations</a></li>
-      
-    <li class="level"><a data-level="#Serious" >Serious Violations</a></li>
-    
-    <li class="level"><a data-level="#Minor">Minor Violations</a></li>
-  </ul>
-  <div id="Critical">
-    <h2>Critical</h2>
-    {% for violation in violations %}
-    {% if violation.violation_number <= 14 %}
-    <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }} {{ violation.details }}</p></a>
-    {% endif %}
-    {% endfor %}
-  </div>
 
-  <div class="not-displayed" id="Serious">
-    <h2>Serious</h2>
-    {% for violation in violations %}
-    {% if violation.violation_number >= 15 and violation.violation_number <= 29 %}
-    <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }} {{ violation.details }}</p></a>
-    {% endif %}
-    {% endfor %}
-  </div>
+{{ violations_template(violations) }}
 
-  <div class="not-displayed" id="Minor">
-    <h2>Minor</h2>
-    {% for violation in violations %}
-    {% if violation.violation_number >= 30 %}
-    <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }} {{ violation.details }}</p></a>
-    {% endif %}
-    {% endfor %}
-  </div>
-</div>
 
-<script>
-$(document).ready(function(){
-  $('.level').click(function(clicked){
-    var unWantedLevel = $('.active').children('a').attr('data-level');
-    $(unWantedLevel).addClass('not-displayed');
-    var wantedLevel = $(this).children('a').attr('data-level');
-    $(wantedLevel).removeClass('not-displayed');
-
-    $('.active').removeClass('active');
-    $(this).addClass('active');
-  });
-});
-</script>
 {% include "footer.html" %}
 {% endblock content %}
 
