@@ -4,10 +4,13 @@
 {% block single_content %}
 <header>
   <h2>{{ facility.branch_name }}</h2>
+  <h3>{{ facility.address }}</h3>
 </header>  
 	
 {% for inspection in facility.inspections %}
- {{ macros.inspection(inspection) }}
-
+ <div class="accordion" id="{{ loop.index }}">
+ {{ macros.inspection(inspection, loop.index) }}
+ </div>
 {% endfor %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 {% endblock single_content %}
