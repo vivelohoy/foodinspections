@@ -23,6 +23,7 @@ from inspections.branch.branchblueprint import branch_blueprint
 from inspections.resources.resourcesblueprint import resources_blueprint
 from inspections.search.searchblueprint import search_blueprint
 from inspections.home.homeblueprint import home_blueprint
+from inspections.facility.facilityblueprint import facility_blueprint
 
 application.register_blueprint(violations_blueprint)
 application.register_blueprint(inspection_blueprint)
@@ -30,6 +31,7 @@ application.register_blueprint(branch_blueprint)
 application.register_blueprint(resources_blueprint)
 application.register_blueprint(search_blueprint)
 application.register_blueprint(home_blueprint)
+application.register_blueprint(facility_blueprint)
 
 from models.models import *
 
