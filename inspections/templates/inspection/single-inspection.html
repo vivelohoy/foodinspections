@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-	{% if inspection.comments|length > 0 %}
+
     <div class="accordion" id="accordion2">
       <div class="accordion-group">
         <div class="accordion-heading">
@@ -51,16 +51,19 @@
         <div id="collapseComments" class="accordion-body collapse">
           <div class="accordion-inner">
               <ul class="inspection-data">
+                  {% if inspection.comments|length > 0 %}
                   {% for comment in inspection.comments %}
                   <li><p>{{ comment.comment }}</p></li>
-                {% endfor %}
+                  {% endfor %}
+                  {% else %}
+                  <li><p>No Comments.</p></li>
+                  {% endif %}
               </ul>
           </div>
         </div>
       </div>
-	{% endif %}
 
-	{% if inspection.violations|length > 0 %}
+	{# {% if inspection.violations|length > 0 %} #}
 	<h3>Violations</h3>
 
     <div class="container" id="violations-container">
@@ -75,7 +78,7 @@
         <h2>Critical</h2>
         {% for violation in inspection.violations %}
         {% if violation.violation_number <= 14 %}
-        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }} {{ violation.details }}</p></a>
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
         {% endif %}
         {% endfor %}
       </div>
@@ -84,7 +87,7 @@
         <h2>Serious</h2>
         {% for violation in inspection.violations %}
         {% if violation.violation_number >= 15 and violation.violation_number <= 29 %}
-        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }} {{ violation.details }}</p></a>
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
         {% endif %}
         {% endfor %}
       </div>
@@ -93,7 +96,7 @@
         <h2>Minor</h2>
         {% for violation in inspection.violations %}
         {% if violation.violation_number >= 30 %}
-        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }} {{ violation.details }}</p></a>
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
         {% endif %}
         {% endfor %}
       </div>
@@ -112,7 +115,7 @@
           });
         });
     </script>
-	{% endif %}
+	{# {% endif %} #}
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script>			
