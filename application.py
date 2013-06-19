@@ -1,3 +1,2 @@
 from inspections import application
-application.run()
-
+application.run(debug=True)
