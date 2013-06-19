@@ -1,5 +1,3 @@
-
-
 {% extends "base.html" %}
 {% block content %}
 
@@ -12,14 +10,6 @@
 	        <div class="btn-group">
 	          <button data-sorting="facility_id" data-sort-style="asc" class="btn btn-mini btn-sort">⬆</button>
 	          <button data-sorting="facility_id" data-sort-style="desc" class="btn btn-mini btn-sort">⬇</button>
-	        </div>
-	      </div>
-	    </th>
-	    <th>Risk Level
-	      <div class="btn-toolbar">
-	        <div class="btn-group">
-	          <button data-sorting="risk" data-sort-style="asc" class="btn btn-mini btn-sort">⬆</button>
-	          <button data-sorting="risk" data-sort-style="desc" class="btn btn-mini btn-sort">⬇</button>
 	        </div>
 	      </div>
 	    </th>
@@ -51,7 +41,6 @@
 <script type="text/template" id="inspection-record">
 	<tr>
       <td><a class="inspection-link" href="inspections/<%= inspection.inspection_id %>" ><%= inspection.facility_id %></a></td>
-      <td><%= inspection.risk %></td>
       <td><%= inspection.inspection_date.replace('00:00:00', '') %></td>
       <td><%= inspection.results %></td>
     </tr>
@@ -101,12 +90,11 @@
 
 			var inspections = this.collection.toJSON();
 			var sorted = _.sortBy(inspections, function(inspection){
-			return inspection[sortingStyle];
-
+    			return inspection[sortingStyle];
 			});
 			
 			if (targeted.target.attributes["data-sort-style"].value == "desc"){
-			sorted = sorted.reverse();
+    			sorted = sorted.reverse();
 			}
 			var that = this;
 			$("#table-body").empty();

@@ -2,17 +2,23 @@
 {% block content %}
 
 <div class="container">
- <h1>Search results for: {{ searched }} </h1>
+  <h3>Search results for: {{ searched }}</h3>
 {% for result in results['branches'] %}
-  <a href="{{ url_for('branch_blueprint.show_branch', branch_name=result.branch_name) }}"><p>{{ result.branch_name }}</p></a>
-{% endfor %}
-
-{% for facility in results['facilities'] %}
-  <a href="{{ url_for('branch_blueprint.show_branch', branch_name=facility.branch_name) }}"><p>{{ facility.branch_name }} » {{ facility.zip }}</p></a>
+  <div class="container">
+    <dl class="dl-horizontal hit">
+      <dt>{{ result.branch_name  }}</dt>
+      {% for facility in result.facilities %}
+      <dd><a href="{{ url_for('branch_blueprint.show_branch', branch_name=facility.branch_name) }}">{{ facility.address }}</a></dd>
+      {% endfor %}
+    </dl>
+  </div>
 {% endfor %}
 
 {% for comment in results['comments'] %}
-  <a href="{{ url_for('inspection_blueprint.show_inspection', id=comment.inspection.inspection_id) }}"><p>{{ comment.comment }}</p></a>
+  <dl class="dl-horizontal hit">
+    <dt>{{ comment.inspection.facility_id }}</dt>
+    <dd><a href="{{ url_for('inspection_blueprint.show_inspection', id=comment.inspection.inspection_id ) }}">{{ comment.comment }}</a></dd>
+  </dl>
 {% endfor %}
 
 </div>
@@ -71,7 +77,8 @@ jQuery.fn.highlight = function (words, options) {
 };
 
 $(document).ready(function(){
-	$('p').highlight('{{ searched }}');
+	$('.hit').highlight('{{ searched }}');
+
 });
 
 

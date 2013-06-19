@@ -14,14 +14,6 @@
     <caption>Inspected on: <a href="{{ url_for('inspection_blueprint.show_inspection', id=inspection.inspection_id) }}">{{ inspection.inspection_date | replace("00:00:00", "") | replace("-", "/") }}</a></caption>
     </thead>
     <tbody>
-      <tr><td class="
-      {% if inspection.risk == 'Risk 1 (High)' %}
-        risk-high
-      {% elif inspection.risk == 'Risk 2 (Medium)' %}
-        risk-medium
-      {% elif inspection.risk == 'Risk 3 (Low)' %}
-        risk-low
-      {% endif %}">{{ inspection.risk }}</td></tr>
       <tr><td>{{ inspection.inspection_date | replace("00:00:00", "") | replace("-", "/") }}</td></tr>
       <tr><td>{{ inspection.inspection_type }}</td></tr>
       <tr><td>{{ inspection.results }}

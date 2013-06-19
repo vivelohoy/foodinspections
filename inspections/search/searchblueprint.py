@@ -15,7 +15,6 @@ def search_zip(search):
             all_results = {}
             search_results = Facilities.query.filter(Facilities.zip.like(search))
             all_results['facilities'] = search_results.all()
-            print "returning"
             return all_results
 
     except ValueError:
