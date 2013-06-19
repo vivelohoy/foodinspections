@@ -1,6 +1,5 @@
 {% macro inspection_info(inspection, i=1) -%}
 
-
       <div class="accordion-group">
         <div class="accordion-heading">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapse{{i}}">
@@ -51,22 +50,21 @@
     </div>
   </div>
 
-
 {%- endmacro %}
 
 {% macro violations(violations, i=1) -%}
     <div class="container" id="violations-container{{i}}">
       <ul class="nav nav-tabs">
-        <li class="level active"><a data-level="#Critical{{i}}">Critical Violations</a></li>
+        <li class="level active"><a data-level="#Critical{{i}}"><span id="tallyCritical{{i}}" class="badge badge-important"></span> Critical Violations</a></li>
           
-        <li class="level"><a data-level="#Serious{{i}}" >Serious Violations</a></li>
+        <li class="level"><a data-level="#Serious{{i}}" ><span id="tallySerious{{i}}" class="badge badge-warning"></span> Serious Violations</a></li>
         
-        <li class="level"><a data-level="#Minor{{i}}">Minor Violations</a></li>
+        <li class="level"><a data-level="#Minor{{i}}"><span class="badge" id="tallyMinor{{i}}"></span> Minor Violations</a></li>
       </ul>
       <div id="Critical{{i}}">
         {% for violation in violations %}
         {% if violation.violation_number <= 14 %}
-        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p class="critial-violation{{i}}">{{ violation.violation_number }}. {{ violation.details }}</p></a>
         {% endif %}
         {% endfor %}
       </div>
@@ -74,7 +72,7 @@
       <div class="not-displayed" id="Serious{{i}}">
         {% for violation in violations %}
         {% if violation.violation_number >= 15 and violation.violation_number <= 29 %}
-        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p class='serious-violation{{i}}'>{{ violation.violation_number }}. {{ violation.details }}</p></a>
         {% endif %}
         {% endfor %}
       </div>
@@ -82,12 +80,23 @@
       <div class="not-displayed" id="Minor{{i}}">
         {% for violation in violations %}
         {% if violation.violation_number >= 30 %}
-        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p>{{ violation.violation_number }}. {{ violation.details }}</p></a>
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p class="minor-violation{{i}}">{{ violation.violation_number }}. {{ violation.details }}</p></a>
         {% endif %}
         {% endfor %}
       </div>
     </div>
 
+
+    <script>
+          var tally = function(classSelector, outputIdSelector){
+              console.log($(classSelector).lenght);
+              $(outputIdSelector).text($(classSelector).length);
+          }
+
+          tally(".minor-violation{{i}}", "#tallyMinor{{i}}");
+          tally(".serious-violation{{i}}", "#tallySerious{{i}}");
+          tally(".critical-violation{{i}}", "#tallyCritical{{i}}");
+    </script>
     <script>
         $(document).ready(function(){
           $('.level').click(function(clicked){
