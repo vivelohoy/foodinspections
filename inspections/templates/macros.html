@@ -64,7 +64,7 @@
       <div id="Critical{{i}}">
         {% for violation in violations %}
         {% if violation.violation_number <= 14 %}
-        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p class="critial-violation{{i}}">{{ violation.violation_number }}. {{ violation.details }}</p></a>
+        <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p class="critical-violation{{i}}">{{ violation.violation_number }}. {{ violation.details }}</p></a>
         {% endif %}
         {% endfor %}
       </div>
@@ -96,6 +96,7 @@
           tally(".minor-violation{{i}}", "#tallyMinor{{i}}");
           tally(".serious-violation{{i}}", "#tallySerious{{i}}");
           tally(".critical-violation{{i}}", "#tallyCritical{{i}}");
+
     </script>
     <script>
         $(document).ready(function(){
