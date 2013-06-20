@@ -179,3 +179,17 @@ only screen and (max-width: 760px),
 a.title-link {
     color: #2D2D2D;
 }
+
+i.icon-right{
+    float: right;    
+}
+i.i-icon{
+    font-size: 30px;
+    vertical-align: -30%;
+}
+
+#home-p {
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}

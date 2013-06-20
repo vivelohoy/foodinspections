@@ -14,7 +14,8 @@
                     background-image: -moz-linear-gradient(81% 82% 270deg,#FFFFFF, #FF7E29);
                   {% endif %}
               ">
-            <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapse{{i}}">{{ inspection.inspection_date|replace('00:00:00', '') }}</a>
+            <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapse{{i}}">{{ inspection.inspection_date|replace('00:00:00', '') }} <i class="icon-arrow-down icon-right"></i>
+</a>
           </div>
         </div>
         <div id="collapse{{i}}" class="accordion-body collapse {% if i == 1 %}in{% endif %}">
@@ -45,7 +46,7 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapseComments{{i}}">
-        Comments
+        Comments<i class="icon-arrow-down icon-right"></i>
       </a>
     </div>
     <div id="collapseComments{{i}}" class="accordion-body collapse{% if i == 1 %}in{% endif %}">
