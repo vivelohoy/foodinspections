@@ -7,7 +7,7 @@
   <h3>{{ facility.address }}</h3>
 </header>  
 	
-{% for inspection in facility.inspections %}
+{% for inspection in facility.inspections|sort(reverse=True, attribute='inspection_date') %}
  <div class="accordion" id="{{ loop.index }}">
  {{ macros.inspection(inspection, loop.index) }}
  </div>

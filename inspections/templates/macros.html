@@ -2,19 +2,32 @@
 
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapse{{i}}">
-            <p>Inspection Results: {{ inspection.results }}
-                {% if inspection.results == "Pass" %}
-                    <i class="icon-thumbs-up"></i>
-                {% elif inspection.results == "Fail" %}
-                  <i class="icon-thumbs-down"></i>
-                {% endif %}
-            </p>
-          </a>
+          <div style="
+                  {% if inspection.results == "Pass" %}
+                    background-image:-webkit-gradient(linear, 100% 82%, 100% 100%, from(#FFFFFF), to(#BAFFB5));
+                    background-image:-moz-linear-gradient(81% 82% 270deg,#FFFFFF, #BAFFB5);
+                  {% elif inspection.results == "Fail" %}
+                    background-image: -webkit-gradient(linear, 0% 82%, 0% 100%, from(#FFFFFF), to(#C23C3C));
+                    background-image: -moz-linear-gradient(81% 82% 270deg,#FFFFFF, #C23C3C);
+                  {% else %}
+                    background-image: -webkit-gradient(linear, 0% 82%, 0% 100%, from(#FFFFFF), to(#FF7E29));
+                    background-image: -moz-linear-gradient(81% 82% 270deg,#FFFFFF, #FF7E29);
+                  {% endif %}
+              ">
+            <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapse{{i}}">{{ inspection.inspection_date|replace('00:00:00', '') }}</a>
+          </div>
         </div>
         <div id="collapse{{i}}" class="accordion-body collapse {% if i == 1 %}in{% endif %}">
           <div class="accordion-inner">
             <ul class="inspection-data">
+              <li><p>
+                Inspection Results: {{ inspection.results }}
+                  {% if inspection.results == "Pass" %}
+                      <i class="icon-thumbs-up"></i>
+                  {% elif inspection.results == "Fail" %}
+                  <i class="icon-thumbs-down"></i>
+                  {% endif %}
+              </p></li>
               <li><p>Inspection Type: {{ inspection.inspection_type }}</p></li>
               <li><p>Inspection Date: {{ inspection.inspection_date.date() }}</p></li>
               <li><p>Facility Type: {{ inspection.facilities.facility_type }} <a id="about-facility-type" rel="popover" data-content="Information About this facility type  Information About this facility type" data-facility-type="{{ inspection.facilities.facility_type }}" data-trigger="hover click" data-original-title="Facility Type Title" data-placement="right"><i class="icon-info-sign"></i></a></p></li>
@@ -31,7 +44,7 @@
 
   <div class="accordion-group">
     <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapseComments{{i}}">
+      <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapseComments{{i}}">
         Comments
       </a>
     </div>
@@ -89,7 +102,6 @@
 
     <script>
           var tally = function(classSelector, outputIdSelector){
-              console.log($(classSelector).lenght);
               $(outputIdSelector).text($(classSelector).length);
           }
 
