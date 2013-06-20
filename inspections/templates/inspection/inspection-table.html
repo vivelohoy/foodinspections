@@ -48,21 +48,15 @@
 
 <script>
     var spinner = new Spinner({color:'#000', lines: 10, radius: 20, shadow: true, length: 10, top:'100px',left:'auto'}).spin(document.getElementById("table-body"));
-	var Inspection = Backbone.Model.extend({
-	
-	});
 	
 	var Inspections = Backbone.Collection.extend({
-	    url:'/api/data',
-	    model:Inspection, 
+	    url:'/api/static/latest',
 	    parse: function(response){
 	    	response = response.objects;
-	    	
 		    return response;
 	    }
 	});
 	var InspectionRecordView = Backbone.View.extend({
-		model: Inspection,
 		el: $("#table-body"),
 		template: _.template($('#inspection-record').html()),
 		render: function(){
@@ -76,8 +70,7 @@
 			var that = this;
 			$("#table-body").empty();
 			this.collection.each(function(inspection){
-				var inspectionToAdd = new Inspection(inspection.toJSON());
-				var inspectionView = new InspectionRecordView({model: inspectionToAdd})
+				var inspectionView = new InspectionRecordView({model: inspection})
 				inspectionView.render();
 				that.$el.append( inspectionView.$el );
 
@@ -115,15 +108,50 @@
 		}
 	});
 	
+
+    var AppRouter = Backbone.Router.extend({
+
+        initialize: function(options){
+            this.inspections = options.inspections;
+            this.inspections_table = options.inspections_table;
+        },
+        routes: {
+            '': 'latestsfetch',
+            'failed': 'failedfetch',
+            'passed': 'passedfetch'
+        },
+        latestsfetch: function(){
+            this.inspections.fetch({
+                success: function(response){
+                    this.inspections_table = new InspectionTable({collection: this.inspections});
+                    this.inspections_table.render();
+                }  
+            });
+        },
+        failedfetch: function(){
+            this.inspections.fetch({url: '/api/static/failed',
+                success: function(response){
+                    this.inspections_table = new InspectionTable({collection: this.inspections});
+                    this.inspections_table.render();
+                }  
+            });
+        },
+        passedfetch: function(){
+            this.inspections.fetch({url: '/api/static/passed',
+                success: function(response){
+                    this.inspections_table = new InspectionTable({collection: this.inspections});
+                    this.inspections_table.render();
+                }  
+            });
+        },
+    });
+
 	var inspections_table;
     var inspections = new Inspections();
-	
-	inspections.fetch({
-  	    success: function(response){
-    	    inspections_table = new InspectionTable({collection: inspections});
-    	    inspections_table.render();
-        }  
-    });
+    var appRouter = new AppRouter({inspections_table: inspections_table, inspections: inspections});
+
+    Backbone.history.start()
+
 
 </script>
 

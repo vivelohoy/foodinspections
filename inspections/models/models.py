@@ -62,8 +62,14 @@ class InspectionComments(db.Model):
     def __init__(self, comment):
         self.comment = comment
         
-api_inspection_blueprint = manager.create_api(Inspection, methods=['GET'], results_per_page=None, exclude_columns=['facilities', 'comments', 'violations'])
+api_inspection_blueprint = manager.create_api(Inspection, methods=['GET'], results_per_page=100, exclude_columns=['facilities', 'comments', 'violations'])
+
 api_violations_blueprint = manager.create_api(Violations, methods=['GET'], results_per_page=50, exclude_columns=['inspection'])
+
 api_branches_blueprint = manager.create_api(Branches, methods=['GET'])
-api_facilities_blueprint = manager.create_api(Facilities, methods=['GET'], results_per_page=500,include_columns=['latitude','branch_name','longitude',  'inspections', 'inspections.results'])
+
+api_facilities_blueprint = manager.create_api(Facilities, methods=['GET'], results_per_page=50, include_columns=['latitude','branch_name','longitude',  'inspections', 'inspections.results'])
+
 api_comments_blueprint = manager.create_api(InspectionComments, methods=['GET'])
+
+api_branches_names_blueprint = manager.create_api(Branches, methods=['GET'], include_columns=['branch_name'], collection_name='branch_names', results_per_page=None)
