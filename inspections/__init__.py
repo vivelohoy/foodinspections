@@ -33,8 +33,5 @@ application.register_blueprint(search_blueprint)
 application.register_blueprint(home_blueprint)
 application.register_blueprint(facility_blueprint)
 
-
-from models.models import *
-
 if __name__ == '__main__':
     application.run()

@@ -19,10 +19,7 @@ def return_data(query):
 
 @inspection_blueprint.route('/inspections')
 def inspection_data():
-    r = request.args.get('r')
-    if not r:
-        r = ""
-    return render_template('inspection/inspection-table.html', param=r)
+    return render_template('inspection/inspection-table.html')
 
 @inspection_blueprint.route('/inspections/<id>')
 def show_inspection(id):
