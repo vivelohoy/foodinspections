@@ -1,46 +1,19 @@
 {% extends "single.html" %}
 
+{% import 'macros.html' as macros with context %}
 {% block single_content %}
 <header>
   <h2>{{ branch.branch_name }}</h2>
 </header>  
 	
 {% for facility in branch.facilities %}
-<div class="facility-info">
-  <h4>{{ facility.branch_name }} &raquo; {{ facility.address}}</h4>
-  {% for inspection in facility.inspections %}
-  <table class="table">
-    <thead>
-    <caption>Inspected on: <a href="{{ url_for('inspection_blueprint.show_inspection', id=inspection.inspection_id) }}">{{ inspection.inspection_date | replace("00:00:00", "") | replace("-", "/") }}</a></caption>
-    </thead>
-    <tbody>
-      <tr><td>{{ inspection.inspection_date | replace("00:00:00", "") | replace("-", "/") }}</td></tr>
-      <tr><td>{{ inspection.inspection_type }}</td></tr>
-      <tr><td>{{ inspection.results }}
-      {% if inspection.results == "Pass" %}
-        <i class="icon-thumbs-up"></i>
-      {% elif inspection.results == "Fail" %}
-        <i class="icon-thumbs-down"></i>
-      {% endif %}</td></tr>
-
-      {% if inspection.comments|length > 0 %}
-      <tr><td><h5>Comments</h5>
-      {% for comment in inspection.comments %}
-      <tr><td>{{ comment.comment }}</td></tr>
-      {% endfor %}
-      </td></tr>
-      {% endif %}
-
-      {% if inspection.violations|length > 0 %}
-      <tr><td><h5>Violations</h5>
-      {% for violation in inspection.violations %}
-      <tr><td>{{ violation.violation_number }}. {{ violation.details }}</td></tr>
-      {% endfor %}
-      </td></tr>
-      {% endif %}
-    </tbody>
-  </table>
-  {% endfor %}
-</div>
+<h4>{{ facility.address }}</h4>
+{% for inspection in facility.inspections|sort(reverse=True, attribute='inspection_date') %}
+<div class="accordion" id="{{ loop.index }}">
+{{ macros.inspection(inspection, loop.index) }}
+ </div>
 {% endfor %}
+{% endfor %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
 {% endblock single_content %}
