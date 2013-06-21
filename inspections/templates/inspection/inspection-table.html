@@ -92,7 +92,7 @@
 			var that = this;
 			$("#table-body").empty();
 			_.each(sorted, function(inspection){
-				var inspectionToAdd = new Inspection(inspection);
+				var inspectionToAdd = new Backbone.Model(inspection);
 				var inspectionView = new InspectionRecordView({model: inspectionToAdd})
 				inspectionView.render();
 				that.$el.append( inspectionView.$el );
