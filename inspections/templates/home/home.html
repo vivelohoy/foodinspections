@@ -33,8 +33,13 @@ $(document).ready(function(){
     $.get('api/branch_names', function(data) {
         data = data['objects'];
         _.each(data, function(branch){
-            branch['label'] = branch['branch_name'];
+            branch['value'] = branch['branch_name'];
+            branch['label'] = branch['branch_name'] + ' » ' + branch['address'];
             delete branch['branch_name'];
+            delete branch['latitude'];
+            delete branch['longitude'];
+            delete branch['address'];
+
         });
         var availableNames = data;
         $( "#appendedInputButton" ).autocomplete({
