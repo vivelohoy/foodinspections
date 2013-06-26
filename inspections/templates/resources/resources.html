@@ -15,9 +15,9 @@
   </section>
   <section>
     <h2 id="About-Data">About This Data</h2>
-    <p>This data is collected from the <a href="https://data.cityofchicago.org/">City of Chicago data portal.</a>The dataset can be viewed at the<a href="https://data.cityofchicago.org/Health-Human-Services/Food-Inspections/4ijn-s7e5"> website in a tabular format.</a> The inspections displayed in this website are from restaurants and other establishments who are evaluated by the <a href="http://www.cityofchicago.org/city/en/depts/cdph/provdrs/environ_health/svcs/food_protection_program.html">Chicago Department of Public Health's Food Protection Division.</a></p>
+    <p>These data are collected from the <a href="https://data.cityofchicago.org/">City of Chicago Data Portal.</a>The dataset can be viewed at the<a href="https://data.cityofchicago.org/Health-Human-Services/Food-Inspections/4ijn-s7e5"> website in a tabular format.</a> The inspections displayed in this website are from restaurants and other establishments which are evaluated by the <a href="http://www.cityofchicago.org/city/en/depts/cdph/provdrs/environ_health/svcs/food_protection_program.html">Chicago Department of Public Health's Food Protection Division.</a></p>
     <h3 id="Risk">Risks</h3>
-    <p>Facilities are evaluated at one of three risk levels(high, medium, low). To have a high risk means that a facility has food practices that are likely to negatively affect the public. </p>
+    <p>Facilities are evaluated at one of three risk levels(High, Medium and Low). To have a high risk means that a facility has food practices that are likely to negatively affect the public. </p>
     <h3 id="Facilities">Facility Types</h3>
     <ul>
       <p>Restaurant</p>
@@ -46,7 +46,7 @@
     </ul>
 
     <h3 id="Violations">Violations</h3>
-    <p>Every violation has a number assigned to it. The numbers range from 1-44, and a 70. Violations ranging from 1-14 are "Critical" violations, the ones ranging from 15-29 are "Serious", and the rest(30-44 and 70) are considered "Minor".</p>
+    <p>Every violation has a number assigned to it. The numbers range from 1 to 44, and the number 70. Violations ranging from 1 to 14 are designated "Critical". The violations ranging from 15 to 29 are "Serious", and the rest - the numbers 30 to 44 and 70 - are considered "Minor".</p>
 
     <h4>Critical Violations</h4>
     <p>This category includes:</p>
@@ -91,15 +91,16 @@
     <h2 id="Developers">For Developers</h2>
     <section>
       <h3>General</h3>
-      <p>This app is written in <a href="http://www.python.org/">Python</a>. <a href="http://flask.pocoo.org/">Flask</a>, <a href="http://pythonhosted.org/Flask-SQLAlchemy/">Flask-SQLAlchemy</a>, <a href="http://flask-restless.readthedocs.org/en/latest/">Flask-Restless</a>, <a href="http://jinja.pocoo.org/docs/">Jinja2</a>, and <a href="http://docs.python-requests.org/en/latest/">Requests</a> are used to handle the backend. The scraper is ` every friday on the <a href="https://data.cityofchicago.org/">City of Chicago data portal.</a> After the scrape the data has been heavily parsed and seperated into different components. Currently the database scheme contains six different tables and each of their use is explained in the <a href="#In-Depth">'In-Depth Discussion'</a>..
+      <p>This app is written in <a href="http://www.python.org/">Python</a>. <a href="http://flask.pocoo.org/">Flask</a>, <a href="http://pythonhosted.org/Flask-SQLAlchemy/">Flask-SQLAlchemy</a>, <a href="http://flask-restless.readthedocs.org/en/latest/">Flask-Restless</a>, <a href="http://jinja.pocoo.org/docs/">Jinja2</a>, and <a href="http://docs.python-requests.org/en/latest/">Requests</a> have been used to handle the backend. The scraper runs every Friday on the <a href="https://data.cityofchicago.org/">City of Chicago Data Portal.</a> After the scrape the data is heavily parsed and separated into different components. The database scheme contains six different tables. The use of each table is explained in the <a href="#In-Depth">'In-Depth Discussion'</a>.
 
       <h4>Source Code</h4>
-      <p>The complete source code is available on Github[insert link here].</p>
+      <p>The complete source code is available on <a href="https://github.com/vivelohoy/foodinspections">Github</a>.</p>
 
       <h4>Contributing</h4>
-      <p>The project is very young and in need of improving. We are very open to new ideas on how the code, infrastructure, and design can improve. Feel free to hack on the project and ask for a pull request. Also if you find any bugs just open a Github issue and we will give it our full attention.</p> 
+      <p> We are very open to ideas on how  to improve the code, infrastructure and design. Please feel free to hack on the project and ask for a pull request. Also, if you find any bugs, just open a Github issue and we will give it our full attention.</p> 
     </section>
     <section>
+    <!--
       <h3 id="In-Depth">In-Depth Discussion</h3>
       <h4>Server Side</h4>
       <p>Everything on the server side is programmed with Python! The scraper(though it is also a parser) is ran every friday. All the data is saved into a SQLite database using the SQL-Alchemy module. Flask-Restless in a really abstract way takes the database models and turns them into a ReSTful API. After that Flask and Jinja2 take over. Taking adavantage of Flask's easy and powerful routing approach all the content is served dynamically via templating.</p>
@@ -113,8 +114,10 @@
       <p></p>
     </section>
     <section>
+    -->
       <h4>License</h4>
       <p>The MIT License</p>
+     
 
       <p>Copyright (c) 2012-2013 Hoy Publication LLC.</p>
 
