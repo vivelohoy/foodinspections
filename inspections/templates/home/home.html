@@ -11,7 +11,7 @@
         <div id="home-search">
             <div class="input-append">
                 <div class="span4" ></div>
-                <input autofocus placeholder="Search by name, keyword or zipcode..."  name="main-data"  class="span4" id="appendedInputButton" type="text">
+                <input autofocus placeholder="Search by name or keyword..."  name="main-data"  class="span4" id="appendedInputButton" type="text">
                 <button class="btn btn-danger" type="submit">Search</button>
             </div>
         </div>
@@ -36,8 +36,6 @@ $(document).ready(function(){
             branch['value'] = branch['branch_name'];
             branch['label'] = branch['branch_name'] + ' » ' + branch['address'];
             delete branch['branch_name'];
-            delete branch['latitude'];
-            delete branch['longitude'];
             delete branch['address'];
 
         });
