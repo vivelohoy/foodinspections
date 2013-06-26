@@ -5,8 +5,8 @@
                 "results": "{{ inspection.results }}",
                 "inspection_date": "{{ inspection.inspection_date }}",
                 "risk": "{{ inspection.risk }}",
-                "lat": {{ inspection.facilities.latitude}},
-                "lon": {{ inspection.facilities.longitude }},
+                "lat": {{ inspection.facilities.latitude or 0 }},
+                "lon": {{ inspection.facilities.longitude or 0 }},
                 "facility_id": "{{ inspection.facility_id }}"
         }{% if not loop.last %},{% endif %}{% endfor %}
     ]
