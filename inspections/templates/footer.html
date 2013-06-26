@@ -1,15 +1,15 @@
 <div id="footer" class="container">
     <div class="floatleft">
-            <h4 class="text-center">Violations Legend</h4>
+            <h4 class="text-center"><a href="{{ url_for('violations_blueprint.show_violations') }}">Violations Legend</a></h4>
     </div>
 
 
     <div class="floatleft">
-            <h4 class="text-center">All Inspections</h4>
+            <h4 class="text-center"><a href="{{ url_for('inspection_blueprint.inspection_data') }}">Latest Inspections</a></h4>
     </div>
 
     <div class="floatleft">
-        <h4 class="text-center">About this app</h4>
+        <h4 class="text-center"><a href="{{ url_for('resources_blueprint.show_resources') }}">About this app</a></h4>
     </div>
 
 
