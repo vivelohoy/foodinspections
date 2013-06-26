@@ -72,4 +72,4 @@ api_facilities_blueprint = manager.create_api(Facilities, methods=['GET'], resul
 
 api_comments_blueprint = manager.create_api(InspectionComments, methods=['GET'])
 
-api_branches_names_blueprint = manager.create_api(Branches, methods=['GET'], include_columns=['branch_name'], collection_name='branch_names', results_per_page=None)
+api_branches_names_blueprint = manager.create_api(Facilities, methods=['GET'], include_columns=['branch_name', 'latitude', 'longitude', 'address'], collection_name='branch_names', results_per_page=None)

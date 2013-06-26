@@ -3,8 +3,8 @@
 
 {% block single_content %}
 <header>
-  <h2>{{ facility.branch_name }}</h2>
-  <h3>{{ facility.address }}</h3>
+  <h4 class="text-center">{{ facility.branch_name }}</h4>
+  <h5 class="text-center">{{ facility.address }}</h5>
 </header>  
 	
 {% for inspection in facility.inspections|sort(reverse=True, attribute='inspection_date') %}

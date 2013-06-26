@@ -38,7 +38,7 @@ def commas_clean(field):
 
 def all_cap_to_sentence(text):
     return strip_capitalize(text) + "."
-    
+   
 def all_cap_paragraph_to_formal(text):
     sentences = text.split(".")
     cleaned_sentences = []
@@ -92,7 +92,8 @@ def update_create_inspection(record):
     
     facility_dictionary = {}
     facility_dictionary['branch_name'] = branch_name_parser(extract_string(record, 'dba_name', record_keys))
-    facility_dictionary['address'] = extract_string(record, 'address', record_keys)
+    address = extract_string(record, 'address', record_keys)
+    facility_dictionary['address'] = ' '.join(word[0].upper() + word[1:].lower() for word in address.split())
     new_facility, facility = get_or_create(db.session, Facilities, branch_name=facility_dictionary['branch_name'], address=facility_dictionary['address'])
     facility.aka_name = extract_string(record, 'aka_name', record_keys)
     facility.license = extract_int(record, 'license_', record_keys)
@@ -100,7 +101,8 @@ def update_create_inspection(record):
     facility.latitude, facility.longitude = extract_location(record, 'location', 'latitude', 'longitude', record_keys)
     facility.zip = extract_int(record, 'zip', record_keys)
     facility.state = extract_string(record, 'state', record_keys)
-    facility.city = extract_string(record, 'city', record_keys)
+    city = extract_string(record, 'city', record_keys)
+    facility.city = strip_capitalize(city)
     
     inspection_dictionary = {}
     inspection_dictionary['inspection_id'] = extract_int(record, 'inspection_id', record_keys)
@@ -142,21 +144,15 @@ def update_create_inspection(record):
         branch.facilities.append(facility)
     
     if new_inspection:
-        print "New inspection: ", inspection.inspection_id
         db.session.add(inspection)
-    else: print "Old inspection: ", inspection.inspection_id
     
     if new_facility:
-        print "New Facility: ", facility.branch_name
         db.session.add(facility)
-    else: print "Old Facility: ", facility.branch_name
     
     if new_branch:
-        print "New Branch: ", branch.branch_name
         db.session.add(branch)
-    else: print "Old Branch: ", branch.branch_name
     db.session.commit()
-    print "Commited:", branch.branch_name, facility.branch_name + facility.address, inspection.inspection_id
+    print "Commited:", branch.branch_name, 'with facility:', facility.branch_name, facility.address, inspection.inspection_id
 
 def scrape():
     # db.create_all()

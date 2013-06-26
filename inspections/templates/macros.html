@@ -6,32 +6,43 @@
                   {% if inspection.results == "Pass" %}
                     background-image:-webkit-gradient(linear, 100% 82%, 100% 100%, from(#FFFFFF), to(#BAFFB5));
                     background-image:-moz-linear-gradient(81% 82% 270deg,#FFFFFF, #BAFFB5);
+                    background: #BAFFB5;
                   {% elif inspection.results == "Fail" %}
                     background-image: -webkit-gradient(linear, 0% 82%, 0% 100%, from(#FFFFFF), to(#C23C3C));
                     background-image: -moz-linear-gradient(81% 82% 270deg,#FFFFFF, #C23C3C);
+                    background: #C23C3C;
                   {% else %}
                     background-image: -webkit-gradient(linear, 0% 82%, 0% 100%, from(#FFFFFF), to(#FF7E29));
                     background-image: -moz-linear-gradient(81% 82% 270deg,#FFFFFF, #FF7E29);
+                    background: #FF7E29;
                   {% endif %}
-              ">
-            <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapse{{i}}">{{ inspection.inspection_date|replace('00:00:00', '') }} <i class="icon-arrow-down icon-right"></i>
-</a>
+                  ">
+            <a class="text-center accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapse{{i}}"><i class="icon-arrow-down icon-right">  </i>   &nbsp;&nbsp;&nbsp;&nbsp;
+                  {% if inspection.results == "Pass" %}
+                      <i class="icon-thumbs-up"></i>Passed on
+                  {% elif inspection.results == "Fail" %}
+                  <i class="icon-thumbs-down"></i> Failed on
+                  {% endif %}Inspected on {{inspection.inspection_date.month}} {{inspection.inspection_date.day}} {{inspection.inspection_date.year}}
+                  <span class="badge pull-right badge-important" id="tallyCriticalTop{{i}}"></span>&nbsp;
+                  <span class="badge pull-right badge-warning" id="tallySeriousTop{{i}}"></span>&nbsp;
+                  <span class="badge pull-right" id="tallyMinorTop{{i}}"></span>&nbsp;
+                  {% if inspection.comments %}
+                      <i class="icon-comment"></i>
+                  {% endif %}
+            </a>
           </div>
         </div>
-        <div id="collapse{{i}}" class="accordion-body collapse {% if i == 1 %}in{% endif %}">
+        <div id="collapse{{i}}" class="accordion-body collapse">
           <div class="accordion-inner">
             <ul class="inspection-data">
-              <li><p>
-                Inspection Results: {{ inspection.results }}
-                  {% if inspection.results == "Pass" %}
-                      <i class="icon-thumbs-up"></i>
-                  {% elif inspection.results == "Fail" %}
-                  <i class="icon-thumbs-down"></i>
-                  {% endif %}
-              </p></li>
               <li><p>Inspection Type: {{ inspection.inspection_type }}</p></li>
-              <li><p>Inspection Date: {{ inspection.inspection_date.date() }}</p></li>
-              <li><p>Facility Type: {{ inspection.facilities.facility_type }} <a id="about-facility-type" rel="popover" data-content="Information About this facility type  Information About this facility type" data-facility-type="{{ inspection.facilities.facility_type }}" data-trigger="hover click" data-original-title="Facility Type Title" data-placement="right"><i class="icon-info-sign"></i></a></p></li>
+            {% if inspection.comments %}
+                {{ inspection_comments(inspection.comments, i) }}
+            {% endif %}
+            {% if inspection.violations %}
+                {{ violations(inspection.violations, i) }}
+            {% endif %}
+
             </ul>
           </div>
         </div>
@@ -46,18 +57,16 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapseComments{{i}}">
-        Comments<i class="icon-arrow-down icon-right"></i>
+        Comments <i class="icon-comment"></i><i class="icon-arrow-down icon-right"></i>
       </a>
     </div>
-    <div id="collapseComments{{i}}" class="accordion-body collapse{% if i == 1 %}in{% endif %}">
+    <div id="collapseComments{{i}}" class="accordion-body collapse">
       <div class="accordion-inner">
           <ul class="inspection-data">
-              {% if comments|length > 0 %}
+              {% if comments %}
               {% for comment in comments %}
               <li><p>{{ comment.comment }}</p></li>
               {% endfor %}
-              {% else %}
-              <li><p>No Comments.</p></li>
               {% endif %}
           </ul>
       </div>
@@ -109,6 +118,9 @@
           tally(".minor-violation{{i}}", "#tallyMinor{{i}}");
           tally(".serious-violation{{i}}", "#tallySerious{{i}}");
           tally(".critical-violation{{i}}", "#tallyCritical{{i}}");
+          tally(".minor-violation{{i}}", "#tallyMinorTop{{i}}");
+          tally(".serious-violation{{i}}", "#tallySeriousTop{{i}}");
+          tally(".critical-violation{{i}}", "#tallyCriticalTop{{i}}");
 
     </script>
     <script>
@@ -130,9 +142,5 @@
 {% macro inspection(inspection, i) -%}
 
     {{ inspection_info(inspection, i) }}
-
-    {{ inspection_comments(inspection.comments, i) }}
-
-    {{ violations(inspection.violations, i) }}
 
 {%- endmacro %}
