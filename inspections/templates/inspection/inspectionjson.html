@@ -4,7 +4,8 @@
                 "inspection_id": {{ inspection.inspection_id }},
                 "results": "{{ inspection.results }}",
                 "inspection_date": "{{ inspection.inspection_date }}",
-                "facility_id": "{{ inspection.facility_id }}"
+                "facility_id": "{{ inspection.facility_id }}",
+                "address": "{{ inspection.facilities.address }}"
         }{% if not loop.last %},{% endif %}{% endfor %}
     ]
 }

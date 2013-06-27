@@ -1,6 +1,6 @@
 {% macro inspection_info(inspection, i=1) -%}
 
-      <div class="accordion-group">
+      <div class="accordion-group" id="{{ inspection.inspection_id }}">
         <div class="accordion-heading">
           <div style="
                   {% if inspection.results == "Pass" %}
@@ -19,28 +19,42 @@
                   ">
             <a class="text-center accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapse{{i}}"><i class="icon-arrow-down icon-right">  </i>   &nbsp;&nbsp;&nbsp;&nbsp;
                   {% if inspection.results == "Pass" %}
-                      <i class="icon-thumbs-up"></i>Passed on
+                      <i class="icon-thumbs-up"></i> on
                   {% elif inspection.results == "Fail" %}
-                  <i class="icon-thumbs-down"></i> Failed on
-                  {% endif %}Inspected on {{inspection.inspection_date.month}} {{inspection.inspection_date.day}} {{inspection.inspection_date.year}}
-                  <span class="badge pull-right badge-important" id="tallyCriticalTop{{i}}"></span>&nbsp;
-                  <span class="badge pull-right badge-warning" id="tallySeriousTop{{i}}"></span>&nbsp;
-                  <span class="badge pull-right" id="tallyMinorTop{{i}}"></span>&nbsp;
+                  <i class="icon-thumbs-down"></i> on
+                  {% endif %}{{inspection.inspection_date.month}} {{inspection.inspection_date.day}} {{inspection.inspection_date.year}}
+
+                  {% if i != 1 %}
+                  <span class="badge badge-important" id="tallyCriticalTop{{i}}"></span>&nbsp;&nbsp;
+                  <span class="badge badge-warning" id="tallySeriousTop{{i}}"></span>&nbsp;&nbsp;
+                  <span class="badge" id="tallyMinorTop{{i}}"></span>&nbsp;&nbsp;
+                  {% endif %}
+
+
+
                   {% if inspection.comments %}
-                      <i class="icon-comment"></i>
+
+                    <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" id="Layer_1" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve" inkscape:version="0.48.2 r9819" sodipodi:docname="1372323398_bubble.svg"><metadata id="metadata3045"><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs id="defs3043" /><sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1313" inkscape:window-height="809" id="namedview3041" showgrid="false" inkscape:zoom="14.59375" inkscape:cx="16" inkscape:cy="16" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="0" inkscape:current-layer="Layer_1" />
+                        <g id="bubble" transform="matrix(1,0,0,1.1345977,0.20556756,-2.0507801)">
+                            <path clip-rule="evenodd" d="M 16,7 C 10.037,7 5,10.206 5,14 5,14.276 5.224,14.5 5.5,14.5 5.776,14.5 6,14.276 6,14 6,10.804 10.673,8 16,8 16.275,8 16.5,7.776 16.5,7.5 16.5,7.224 16.276,7 16,7 z" id="path3037" inkscape:connector-curvature="0" style="fill:#333333;fill-rule:evenodd" />
+                            <path clip-rule="evenodd" d="M 16,2 C 7.163,2 0,7.373 0,14 0,18.127 2.779,21.766 7.008,23.926 7.008,23.953 7,23.971 7,24 c 0,1.793 -1.339,3.723 -1.928,4.736 0.001,0 0.002,0 0.002,0 C 5.027,28.846 5,28.967 5,29.094 5,29.594 5.405,30 5.906,30 6,30 6.165,29.975 6.161,29.986 9.286,29.474 12.23,26.603 12.914,25.771 13.913,25.918 14.943,26 16,26 24.835,26 32,20.627 32,14 32,7.373 24.836,2 16,2 z m 0,22 c -0.917,0 -1.858,-0.07 -2.796,-0.207 -0.097,-0.016 -0.194,-0.021 -0.29,-0.021 -0.594,0 -1.163,0.264 -1.546,0.73 -0.428,0.521 -1.646,1.684 -3.085,2.539 0.39,-0.895 0.695,-1.898 0.716,-2.932 0.006,-0.064 0.009,-0.129 0.009,-0.184 0,-0.752 -0.421,-1.439 -1.09,-1.781 C 4.212,20.252 2,17.207 2,14 2,8.486 8.28,4 16,4 c 7.718,0 14,4.486 14,10 0,5.514 -6.281,10 -14,10 z" id="path3039" inkscape:connector-curvature="0" style="fill:#333333;fill-rule:evenodd" />
+                           <text x="12" y="20" font-family="Verdana" font-size="14" fill="black" >{{ inspection.comments|length }}</text>
+                        </g>
+                    </svg>
+
                   {% endif %}
             </a>
           </div>
         </div>
-        <div id="collapse{{i}}" class="accordion-body collapse">
-          <div class="accordion-inner">
+        <div id="collapse{{i}}" class="accordion-body collapse{% if i==1 %}in{% endif %}">
+          <div class="accordion-inner"> 
             <ul class="inspection-data">
               <li><p>Inspection Type: {{ inspection.inspection_type }}</p></li>
             {% if inspection.comments %}
                 {{ inspection_comments(inspection.comments, i) }}
             {% endif %}
             {% if inspection.violations %}
-                {{ violations(inspection.violations, i) }}
+                {{ violations_inspection(inspection.violations, i) }}
             {% endif %}
 
             </ul>
@@ -56,11 +70,9 @@
 
   <div class="accordion-group">
     <div class="accordion-heading">
-      <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapseComments{{i}}">
-        Comments <i class="icon-comment"></i><i class="icon-arrow-down icon-right"></i>
-      </a>
+      <a class="accordion-toggle title-link" data-toggle="collapse" data-parent="#accordion{{i}}" href="#collapseComments{{i}}">Comments</a>
     </div>
-    <div id="collapseComments{{i}}" class="accordion-body collapse">
+    <div id="collapseComments{{i}}" class="accordion-body collapse{% if i==1 %}in{% endif %}">
       <div class="accordion-inner">
           <ul class="inspection-data">
               {% if comments %}
@@ -112,7 +124,10 @@
 
     <script>
           var tally = function(classSelector, outputIdSelector){
-              $(outputIdSelector).text($(classSelector).length);
+              var tally_len = $(classSelector).length;
+              if (tally_len > 0){
+                $(outputIdSelector).text(tally_len);
+              }
           }
 
           tally(".minor-violation{{i}}", "#tallyMinor{{i}}");
@@ -138,6 +153,37 @@
     </script>
 
 {%- endmacro %}
+
+{% macro violations_inspection(violations, i=1) -%}
+
+    {% for violation in violations %}
+    <a href="{{ url_for('violations_blueprint.show_single_violation', violation_number=violation.violation_number) }}"><p class="
+        {% if violation.violation_number <= 14 %}
+        text-error critical-violation{{i}}
+        {%  elif violation.violation_number >= 15 and violation.violation_number <= 29 %}
+        text-warning serious-violation{{i}}
+        {% elif violation.violation_number >= 30 %}
+        muted minor-violation{{i}}
+        {% endif %}">{{ violation.violation_number }}.{{ violation.details }}</p></a>
+    {% endfor %}
+    <script>
+          var tally = function(classSelector, outputIdSelector){
+              var tally_len = $(classSelector).length;
+              if (tally_len > 0){
+                $(outputIdSelector).text(tally_len);
+              }
+          }
+          tally(".minor-violation{{i}}", "#tallyMinor{{i}}");
+          tally(".serious-violation{{i}}", "#tallySerious{{i}}");
+          tally(".critical-violation{{i}}", "#tallyCritical{{i}}");
+          tally(".minor-violation{{i}}", "#tallyMinorTop{{i}}");
+          tally(".serious-violation{{i}}", "#tallySeriousTop{{i}}");
+          tally(".critical-violation{{i}}", "#tallyCriticalTop{{i}}");
+
+    </script>
+
+{%- endmacro %}
+
 
 {% macro inspection(inspection, i) -%}
 

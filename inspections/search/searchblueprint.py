@@ -27,7 +27,7 @@ def search():
             length_of_search = len(original_search)
             application.logger.info('Searched for: %s' % original_search)
             if length_of_search <= 3: # Query too big to perform on sane time
-                return render_template('search/no-search.html')
+                return render_template('search/no-search.html', response_message="Search term too short")
             search_keyword = request.form['main-data'].replace('\'', '').replace('"', '').replace('<', '').replace('>', '')
             search_keyword = '%' + search_keyword + '%'
 
@@ -46,8 +46,8 @@ def search():
                 if zip_codes:
                     return render_template('search/results.html', results=zip_codes, searched=zip_codes)
                 else: 
-                    return render_template('search/no-search.html')
+                    return render_template('search/no-search.html', response_message="No results found")
         else: 
-            return render_template('search/no-search.html')
+            return render_template('search/no-search.html', response_message="No search keywords provided")
     else:
-        return render_template('search/no-search.html')
+        return render_template('search/no-search.html', response_message="Search with the search bar above")

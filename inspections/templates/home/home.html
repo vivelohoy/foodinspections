@@ -4,22 +4,21 @@
 
 {% block content %}
 
-<div id="footer" class="container">
-    <h1>Chicago Food Inspections</h1>
+<div class="container">
+    <h1 class="text-center shrinking-title">Chicago Food Inspections</h1>
 
-    <form class="form-search" action="{{ url_for('search_blueprint.search') }}" method="post">
-        <div id="home-search">
-            <div class="input-append">
-                <div class="span4" ></div>
-                <input autofocus placeholder="Search by name or keyword..."  name="main-data"  class="span4" id="appendedInputButton" type="text">
-                <button class="btn btn-danger" type="submit">Search</button>
-            </div>
-        </div>
-    </form>
-    <div id="home-p">
-        <p class="lead">In the last week, <a href="/inspections#passed"><i class="i-icon">{{ passed }}</i></a> establishments passed, and <a href="inspections#failed"><i class="i-icon">{{ failed }}</i></a> failed!</p>
+      <form style="margin: 4px;" class="" action="{{ url_for('search_blueprint.search') }}" method="post">
+          <div class="input-append">
+            <div class="span4"></div>
+            <input placeholder="i.e. Burger King"  name="main-data"  class="span4" id="appendedInputButton" type="text">
+            <button class="btn btn-danger" type="submit">Search</button>
+          </div>
+      </form>
+    <div>
+        <p class="lead text-center home-p">In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> food inspections were passed, and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</p>
 
     </div>
+{% include "footer.html" %}
 
 </div>
 
@@ -48,5 +47,4 @@ $(document).ready(function(){
 });
 </script>
 
-{% include "footer.html" %}
 {% endblock content %}

@@ -8,12 +8,14 @@ home_blueprint = Blueprint("home_blueprint", __name__)
 @home_blueprint.route("/")
 def show_home():
     today = datetime.date.today()
-    seven_days_ago = today - datetime.timedelta(days=7)
-    all_inspections = db.session.query(func.count(Inspection.inspection_id))
-    total = all_inspections.all()
+    
+    thirty_days_ago = today - datetime.timedelta(days=30)
 
-    inspections_this_week = all_inspections.filter(Inspection.inspection_date >= seven_days_ago)
+    inspections_this_month = Inspection.query.filter(Inspection.inspection_date >= thirty_days_ago)
 
-    week_passed = inspections_this_week.filter_by(results = 'Pass').all()
-    week_failed = inspections_this_week.filter_by(results = 'Fail').all()
-    return render_template('home/home.html', total=total[0][0], total_this_week=inspections_this_week[0][0],passed=week_passed[0][0], failed=week_failed[0][0])
+    month_passed = inspections_this_month.filter_by(results = 'Pass').all()
+    month_failed = inspections_this_month.filter_by(results = 'Fail').all()
+
+    for inspection in month_passed:
+        print str(inspection.inspection_date).replace('00:00:00','')
+    return render_template('home/home.html',passed=len(month_passed), failed=len(month_failed))

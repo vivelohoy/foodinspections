@@ -1,18 +1,20 @@
 <div id="footer" class="container">
-    <div class="floatleft">
-            <h4 class="text-center"><a href="{{ url_for('violations_blueprint.show_violations') }}">Violations Legend</a></h4>
-    </div>
+    <ul class="footer-nav text-center">
+        <li>
+            <a href="{{ url_for('inspection_blueprint.inspection_data') }}">Latest Inspections</a>
+        </li>
 
+        <li>
+            <a href="{{ url_for('violations_blueprint.show_violations') }}">Violations Legend</a>
+        </li>
 
-    <div class="floatleft">
-            <h4 class="text-center"><a href="{{ url_for('inspection_blueprint.inspection_data') }}">Latest Inspections</a></h4>
-    </div>
-
-    <div class="floatleft">
-        <h4 class="text-center"><a href="{{ url_for('resources_blueprint.show_resources') }}">About this app</a></h4>
-    </div>
-
-
-
+        <li>
+            <a href="{{ url_for('resources_blueprint.show_resources') }}">About this app</a>
+        </li>
+    </ul>
     <div class="clear"></div>
+    <small class="text-center">
+        <p>435 N. Michigan Ave., 2nd floor, Chicago, IL 60611</p>
+        <p>Copyright (c) 2013 Developed by Hoy Publication LLC.</p>
+    </small>
 </div>

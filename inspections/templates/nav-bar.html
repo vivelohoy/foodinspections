@@ -1,19 +1,16 @@
-
-<div class="container">
-  <div class="navbar">
+  <div class="navbar navbar-fixed-top" style="padding-bottom=300px;">
     <div class="navbar-inner">
       <a class="brand" href="{{ url_for('home_blueprint.show_home') }}">Chicago Food Inspections</a>
       <ul class="nav">
-
         <li>
-          <form class="navbar-form" action="{{ url_for('search_blueprint.search') }}" method="post">
-            <div>
-              <input type="text" placeholder="i.e. Burger King..." name="main-data" class="input-medium search-query">
-              <button type="submit" class="btn"><i class="icon-search"></i></button>
-            </div>
+          <form style="margin: 4px;" class="" action="{{ url_for('search_blueprint.search') }}" method="post">
+              <div class="input-append">
+                <input placeholder="i.e. Burger King"  name="main-data"  class="span6" id="appendedInputButton" type="text">
+                <button class="btn btn-danger" type="submit">Search</button>
+              </div>
           </form>
         </li>
       </ul>
     </div>
   </div>
-</div>
+<div class="hidden-tablet hidden-phone" style="height:60px;"></div>

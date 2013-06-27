@@ -1,46 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
-
-<table  id="inspection-data" class="table table-bordered table-striped table-condensed">
-	<caption class="table-header"><h1>Food Inspections</h1></caption>
-	<thead>
-		<tr>
-	    <th>Restaurant Name 
-	      <div class="btn-toolbar">
-	        <div class="btn-group">
-	          <button data-sorting="facility_id" data-sort-style="asc" class="btn btn-mini btn-sort">⬆</button>
-	          <button data-sorting="facility_id" data-sort-style="desc" class="btn btn-mini btn-sort">⬇</button>
-	        </div>
-	      </div>
-	    </th>
-	    <th>Inspection Date
-	      <div class="btn-toolbar">
-	        <div class="btn-group">
-	          <button data-sorting="inspection_date" data-sort-style="asc" class="btn btn-mini btn-sort">⬆</button>
-	          <button data-sorting="inspection_date" data-sort-style="desc" class="btn btn-mini btn-sort">⬇</button>
-	        </div>
-	      </div>
-	    </th>
-	    <th>Results
-	      <div class="btn-toolbar">
-	        <div class="btn-group">
-	          <button data-sorting="results" data-sort-style="asc" class="btn btn-mini btn-sort">⬆</button>
-	          <button data-sorting="results" data-sort-style="desc" class="btn btn-mini btn-sort">⬇</button>
-	        </div>
-	      </div>
-	    </th>
-	  </tr>
-	</thead>
-	<tbody id="table-body">
-		
-	</tbody>
-</table>
-
+<div class="container">
+    <table  id="inspection-data" class="table table-bordered table-striped table-condensed">
+        <caption class="table-header"><h1 id="title">Food Inspections</h1></caption>
+        <thead>
+            <tr>
+            <th class="hidden-phone">Restaurant Name 
+              <div class="btn-toolbar">
+                <div class="btn-group">
+                  <button data-sorting="facility_id" data-sort-style="asc" class="btn btn-mini btn-sort">⬆</button>
+                  <button data-sorting="facility_id" data-sort-style="desc" class="btn btn-mini btn-sort">⬇</button>
+                </div>
+              </div>
+            </th>
+            <th class="hidden-phone">Inspection Date
+              <div class="btn-toolbar">
+                <div class="btn-group">
+                  <button data-sorting="inspection_date" data-sort-style="asc" class="btn btn-mini btn-sort">⬆</button>
+                  <button data-sorting="inspection_date" data-sort-style="desc" class="btn btn-mini btn-sort">⬇</button>
+                </div>
+              </div>
+            </th>
+            <th class="hidden-phone">Results
+              <div class="btn-toolbar">
+                <div class="btn-group">
+                  <button data-sorting="results" data-sort-style="asc" class="btn btn-mini btn-sort">⬆</button>
+                  <button data-sorting="results" data-sort-style="desc" class="btn btn-mini btn-sort">⬇</button>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+            
+        </tbody>
+    </table>
+</div>
 
 
 <script type="text/template" id="inspection-record">
-	<tr>
-      <td><a class="inspection-link" href="inspections/<%= inspection.inspection_id %>" ><%= inspection.facility_id %></a></td>
+	<tr class="<% if (inspection.results === 'Pass'){ %> success <% } else if( inspection.results === 'Fail'){ %> error <% } else { %> warning <% } %>">
+      <td><a class="inspection-link" href="facility/<%= inspection.facility_id %>/<%= inspection.address %>">
+      <%= inspection.facility_id %></a></td>
       <td><%= inspection.inspection_date.replace('00:00:00', '') %></td>
       <td><%= inspection.results %></td>
     </tr>
@@ -121,6 +122,7 @@
             'passed': 'passedfetch'
         },
         latestsfetch: function(){
+            $('#title').text('Latest Food Inspections');
             this.inspections.fetch({
                 success: function(response){
                     this.inspections_table = new InspectionTable({collection: this.inspections});
@@ -129,6 +131,7 @@
             });
         },
         failedfetch: function(){
+            $('#title').text('Food Inspections Failed');
             this.inspections.fetch({url: '/api/static/failed',
                 success: function(response){
                     this.inspections_table = new InspectionTable({collection: this.inspections});
@@ -137,6 +140,7 @@
             });
         },
         passedfetch: function(){
+            $('#title').text('Food Inspections Passed');
             this.inspections.fetch({url: '/api/static/passed',
                 success: function(response){
                     this.inspections_table = new InspectionTable({collection: this.inspections});
@@ -152,9 +156,6 @@
 
     Backbone.history.start()
 
-
 </script>
-
-</div>
 
 {% endblock content %}
