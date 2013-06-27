@@ -1,19 +1,11 @@
 {% extends "base.html" %}
 
-{% block navigation_bar  %} {% endblock navigation_bar  %}
+{% block navigation_bar  %} {{ super() }} {% endblock navigation_bar  %}
 
 {% block content %}
 
 <div class="container">
     <h1 class="text-center shrinking-title">Chicago Food Inspections</h1>
-
-      <form style="margin: 4px;" class="" action="{{ url_for('search_blueprint.search') }}" method="post">
-          <div class="input-append">
-            <div class="span4"></div>
-            <input placeholder="i.e. Burger King"  name="main-data"  class="span4" id="appendedInputButton" type="text">
-            <button class="btn btn-danger" type="submit">Search</button>
-          </div>
-      </form>
     <div>
         <p class="lead text-center home-p">In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> food inspections were passed, and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</p>
 

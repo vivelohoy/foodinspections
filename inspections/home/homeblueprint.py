@@ -16,6 +16,4 @@ def show_home():
     month_passed = inspections_this_month.filter_by(results = 'Pass').all()
     month_failed = inspections_this_month.filter_by(results = 'Fail').all()
 
-    for inspection in month_passed:
-        print str(inspection.inspection_date).replace('00:00:00','')
     return render_template('home/home.html',passed=len(month_passed), failed=len(month_failed))
