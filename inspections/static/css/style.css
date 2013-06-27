@@ -166,6 +166,10 @@ button.ui-button-left {
   height: 60px;
 }
 
+ul.ui-autocomplete.ui-front.ui-menu.ui-widget.ui-widget-content.ui-corner-all {
+  z-index: 1100;
+}
+
 @media only screen and (max-width: 729px) {
   ul.footer-nav li{
     display: block;

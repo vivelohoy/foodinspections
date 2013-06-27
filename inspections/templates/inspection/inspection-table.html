@@ -38,6 +38,7 @@
 </div>
 
 
+
 <script type="text/template" id="inspection-record">
 	<tr class="<% if (inspection.results === 'Pass'){ %> success <% } else if( inspection.results === 'Fail'){ %> error <% } else { %> warning <% } %>">
       <td><a class="inspection-link" href="facility/<%= inspection.facility_id %>/<%= inspection.address %>">

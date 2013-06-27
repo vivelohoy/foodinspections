@@ -7,7 +7,7 @@
 <div class="container">
     <h1 class="text-center shrinking-title">Chicago Food Inspections</h1>
     <div>
-        <p class="lead text-center home-p">In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> food inspections were passed, and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</p>
+        <p class="lead text-center home-p">In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> establishments passed, and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</p>
 
     </div>
 {% include "footer.html" %}
@@ -20,23 +20,70 @@
 <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
 <script>
 
-$(document).ready(function(){
-    $.get('api/branch_names', function(data) {
-        data = data['objects'];
-        _.each(data, function(branch){
-            branch['value'] = branch['branch_name'];
-            branch['label'] = branch['branch_name'] + ' » ' + branch['address'];
-            delete branch['branch_name'];
-            delete branch['address'];
 
-        });
-        var availableNames = data;
-        $( "#appendedInputButton" ).autocomplete({
-            source: availableNames 
-        });
+var user;
+var names_data;
 
+$.get('api/branch_names', function(data) {
+    names_data = data['objects'];
+    _.each(names_data, function(branch){
+        branch['value'] = branch['branch_name'];
+        branch['label'] = branch['branch_name'] + ' » ' + branch['address'];
+        delete branch['branch_name'];
+        delete branch['address'];
+        return branch;
     });
+
+    getLocation();
+
 });
+
+function near(user, branch, distance){ 
+    var branch_r_latitude = (branch['latitude'] * Math.PI)/180
+    var branch_r_longitude = (branch['longitude'] * Math.PI)/180
+    var user_r_lat = (user['lat'] * Math.PI)/180
+    var user_r_lon = (user['lon'] * Math.PI)/180
+    value =  3959 * Math.acos( Math.cos( user_r_lat ) * Math.cos( branch_r_latitude ) * Math.cos( branch_r_longitude  - (user_r_lon) ) + Math.sin( user_r_lat ) * Math.sin(  branch_r_latitude  ) ) ;
+    return value < distance;
+}
+
+function noLocationData(e){
+    console.log('Pop up here');
+    
+    _.each(names_data, function(branch){
+        delete branch['latitude'];
+        delete branch['longitude'];
+        return branch;
+    });
+    names_data = names_data.splice(0,Math.ceil(names_data.length / 2))
+
+    $( "#appendedInputButton" ).autocomplete({
+        source: names_data
+    });
+}
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(returnData, noLocationData);
+    }
+    else{
+        console.log('Geolocation not Supported.');
+    }
+};
+
+function returnData(data){
+    coor_data = data['coords']
+    user = {'lat': coor_data['latitude'],'lon': coor_data['longitude']};
+
+    names_data = _.filter(names_data, function(branch){
+        var near_by = near(user, branch, .1);
+        return near_by;
+    });
+    $( "#appendedInputButton" ).autocomplete({
+        source: names_data
+    });
+}
+
 </script>
 
 {% endblock content %}
