@@ -37,7 +37,7 @@
     </table>
 </div>
 
-
+{% block footer %}{% endblock %}
 
 <script type="text/template" id="inspection-record">
 	<tr class="<% if (inspection.results === 'Pass'){ %> success <% } else if( inspection.results === 'Fail'){ %> error <% } else { %> warning <% } %>">
@@ -158,5 +158,6 @@
     Backbone.history.start()
 
 </script>
+
 
 {% endblock content %}

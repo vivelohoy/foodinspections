@@ -1,16 +1,18 @@
-{% extends "single.html" %}
+{% extends "base.html" %}
 {% import 'macros.html' as macros with context %}
 
-{% block single_content %}
+{% block content %}
+<div class="container">
 <header>
   <h4 class="text-center">{{ facility.branch_name }}</h4>
   <h5 class="text-center">{{ facility.address }}</h5>
 </header>  
-	
+
 {% for inspection in facility.inspections|sort(reverse=True, attribute='inspection_date') %}
  <div class="accordion" id="{{ loop.index }}">
  {{ macros.inspection(inspection, loop.index) }}
  </div>
 {% endfor %}
+</div>
 <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-{% endblock single_content %}
+{% endblock content %}
