@@ -76,7 +76,7 @@ function returnData(data){
     user = {'lat': coor_data['latitude'],'lon': coor_data['longitude']};
 
     names_data = _.filter(names_data, function(branch){
-        var near_by = near(user, branch, .1);
+        var near_by = near(user, branch, .25);
         return near_by;
     });
     $( "#appendedInputButton" ).autocomplete({
