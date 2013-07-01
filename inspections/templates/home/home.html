@@ -7,6 +7,11 @@ body {
     padding: 0;
     margin: 0;
 }
+
+div.navbar.navbar-fixed-top {
+    margin: 0;
+    padding: 0;    
+}
 html, body, #map {
     height: 100%;
     width: 100%;
@@ -179,14 +184,15 @@ only screen and (min-device-pixel-ratio : 1.5) {
 </style>
 
 {% block navigation_bar %}
-  <div class="navbar navbar-fixed-top">
+{% endblock navigation_bar %}
+  <div class="navbar navbar-fixed-top inside-map">
     <div class="navbar-inner">
       <a class="brand" href="{{ url_for('home_blueprint.show_home') }}">Chicago Food Inspections</a>
       <ul class="nav">
         <li>
           <form style="margin: 4px;" class="" action="{{ url_for('search_blueprint.search') }}" method="post">
               <div class="input-append">
-                <input placeholder="i.e. Burger King"  name="main-data" class="span6" id="appendedInputButton" type="text">
+                <input placeholder="i.e. Burger King"  name="main-data" class="span6" autocomplete='on' id="appendedInputButton" type="text">
                 <button class="btn btn-danger" type="submit">Search</button>
               </div>
           </form>
@@ -197,8 +203,6 @@ only screen and (min-device-pixel-ratio : 1.5) {
       </ul>
     </div>
   </div>
-
-{% endblock navigation_bar %}
 
 <div id="map">
 
@@ -251,7 +255,6 @@ only screen and (min-device-pixel-ratio : 1.5) {
     <% _.each(facilities, function(facility){ %>
         <a href="/facility/<%= facility.value %>/<%= facility.address %>"><%= facility.label %></p>
     <% }); %>
-    
 </script> 
 
 
@@ -331,10 +334,10 @@ function returnData(data){
     });
 
     mainMap.setView([user['lat'], user['lon']], 18);
+    console.log(names_data);
     $( "#appendedInputButton" ).autocomplete({
         source: names_data
     });
-
 }
 
 
