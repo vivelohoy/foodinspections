@@ -31,8 +31,6 @@ a:hover {
 a:active {
   text-decoration: none;
 }
-
-
 ul.footer-nav {
     list-style-type:none;
     padding:10;
@@ -41,11 +39,6 @@ ul.footer-nav li {
     display:inline;
     margin-right: 5%;
     font-size: 20px;
-
-}
-
-.home-p a b{
-    vertical-align: bottom;    
 }
 
 .table-header {
@@ -105,45 +98,6 @@ i.icon-right {
 i.i-icon {
   font-size: 30px;
   vertical-align: -30%;
-}
-
-#map {
-  height: 100%;
-  width: 100%;
-}
-.inside-map {
-  position: relative;
-  z-index: 1;
-  background: #ffffff;
-  padding: 10px;
-  opacity: .95;
-}
-#main-text {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 35%;
-}
-#main-text .lead {
-  font-size: 13px;
-}
-#map-footnotes {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 25%;
-}
-button.ui-button {
-  position: absolute;
-}
-button.ui-button-right {
-  top: 0;
-  right: 0;
-}
-button.ui-button-left {
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 .navbar .brand {
     margin-left: 20px;    

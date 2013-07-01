@@ -4,6 +4,7 @@ from inspections import application
 from flask import Blueprint, render_template, request
 from inspections import db
 from inspections.models.models import Branches, Facilities, Violations, Inspection, InspectionComments
+import datetime
 
 search_blueprint = Blueprint("search_blueprint", __name__)
 
@@ -25,7 +26,7 @@ def search():
         if request.form['main-data']:
             original_search = request.form['main-data']
             length_of_search = len(original_search)
-            application.logger.info('Searched for: %s' % original_search)
+            application.logger.info('Searched for: %s at %s' % (original_search, datetime.datetime.today()))
             if length_of_search <= 3: # Query too big to perform on sane time
                 return render_template('search/no-search.html', response_message="Search term too short")
             search_keyword = request.form['main-data'].replace('\'', '').replace('"', '').replace('<', '').replace('>', '')

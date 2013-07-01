@@ -1,13 +1,238 @@
 {% extends "base.html" %}
 
-{% block navigation_bar  %} {{ super() }} {% endblock navigation_bar  %}
-
 {% block content %}
 
-<div class="container">
-    <h1 class="text-center shrinking-title">Chicago Food Inspections</h1>
-    <div>
-        <p class="lead text-center home-p">In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> establishments passed and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</p>
+<style>
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100%;
+    width: 100%;
+}
+
+.inside-map {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  padding: 10px;
+  opacity: .95;
+}
+#main-text {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 20%;
+  height: 100%;
+}
+#main-text .lead {
+  font-size: 13px;
+}
+
+button.ui-button {
+  position: absolute;
+}
+button.ui-button-right {
+  top: 0;
+  right: 0;
+}
+button.ui-button-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.home-p a b{
+    vertical-align: bottom;    
+}
+#looking {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20%;
+  height: 20%;
+  margin-top: -150px;
+  margin-left: -150px;
+  opacity: .8;
+  -webkit-border-radius: 200px;
+  -moz-border-radius: 200px;
+  border-radius: 200px;
+}
+
+#map-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+#map-footer ul li{
+    display: inline;
+    margin-left: .5%;
+    font-size: 20px;
+    margin-right: 100px;
+}
+#map-footer p{
+    margin-left: .5%;
+    margin-right: 15px;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+#near-you {
+    font-size: 15px;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+/* Styles */
+body {
+    font-size: 10px;    
+}
+#main-text .lead{
+    font-size: 11px;
+    line-height: 12px;
+
+}
+
+#map-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+#map-footer ul li{
+    display: inline;
+    margin-left: 0px;
+    font-size: 80%;
+    margin-right: 20px;
+}
+#map-footer p{
+    width: 100%;
+    font-size: 50%;
+    line-height: 1px;
+}
+
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen 
+and (min-width : 321px) {
+/* Styles */
+    
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+/* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+/* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
+<p class="lead text-center home-p">In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> establishments passed and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</p>
+
+
+
+
+</style>
+
+{% block navigation_bar %}
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <a class="brand" href="{{ url_for('home_blueprint.show_home') }}">Chicago Food Inspections</a>
+      <ul class="nav">
+        <li>
+          <form style="margin: 4px;" class="" action="{{ url_for('search_blueprint.search') }}" method="post">
+              <div class="input-append">
+                <input placeholder="i.e. Burger King"  name="main-data" class="span6" id="appendedInputButton" type="text">
+                <button class="btn btn-danger" type="submit">Search</button>
+              </div>
+          </form>
+        </li>
+        <li>
+            <small>In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> establishments passed and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+{% endblock navigation_bar %}
+
+<div id="map">
+
+    <div id="looking" class="inside-map hidden-phone">
+        <h4 class="text-center">Looking for you...</h4>
+        
+        <script>
+            var spinner = new Spinner({color:'#000', lines: 10, radius: 20, shadow: true, length: 10, top:'40px',left:'auto'}).spin(document.getElementById("looking"));
+        </script>
+        
+    </div>
+
+    <div class="visible-phone" id="looking-mobile">
+    
+    </div>
+
+    <div id="map-footer" class="inside-map">
+        <ul>
+            <li>
+                <a href="{{ url_for('inspection_blueprint.inspection_data') }}">Latest Inspections</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('violations_blueprint.show_violations') }}">Violations Legend</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('resources_blueprint.show_resources') }}">About this app</a>
+            </li>
+        </ul>
+
+        <p>
+            Developed by Hoy Publications LLC.
+        </p>
     </div>
 </div>
 
@@ -15,19 +240,40 @@
 
 <link href="{{ url_for('static', filename='css/searchtemplate.min.css') }}" rel="stylesheet">
 <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
-<script>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+ <![endif]-->
+<script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
 
+<script type="html/template" id="nears-template">
+    <p>See how the restaurants near you perfom.</p>
+    <% _.each(facilities, function(facility){ %>
+        <a href="/facility/<%= facility.value %>/<%= facility.address %>"><%= facility.label %></p>
+    <% }); %>
+    
+</script> 
+
+
+<script>
 
 var user;
 var names_data;
+var mainMap = L.map('map').setView([41.8500, -87.6500],13); // Chicago coordinates
+var osmUrl = 'http://{s}.tile.cloudmade.com/96843c61d97c48e9b100508c96fb01cb/997/256/{z}/{x}/{y}.png'
+L.tileLayer( osmUrl, {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+    maxZoom: 18
+}).addTo(mainMap);
 
+
+var marker_template = _.template('<a href="/facility/<%= branch.value%>/<%= branch.address%>"><p><%= branch.label %>')
 $.get('api/branch_names', function(data) {
     names_data = data['objects'];
     _.each(names_data, function(branch){
         branch['value'] = branch['branch_name'];
         branch['label'] = branch['branch_name'] + ' » ' + branch['address'];
         delete branch['branch_name'];
-        delete branch['address'];
         return branch;
     });
 
@@ -50,13 +296,16 @@ function noLocationData(e){
     _.each(names_data, function(branch){
         delete branch['latitude'];
         delete branch['longitude'];
+        delete branch['address'];
         return branch;
     });
+
     names_data = names_data.splice(0,Math.ceil(names_data.length / 2))
 
     $( "#appendedInputButton" ).autocomplete({
         source: names_data
     });
+    $('#looking').remove();
 }
 
 function getLocation() {
@@ -71,16 +320,32 @@ function getLocation() {
 function returnData(data){
     coor_data = data['coords']
     user = {'lat': coor_data['latitude'],'lon': coor_data['longitude']};
-
+    $('#looking').remove();
     names_data = _.filter(names_data, function(branch){
-        var near_by = near(user, branch, .25);
+        var near_by = near(user, branch, .2);
+        if (near_by){ 
+            var marker = L.marker([branch['latitude'],branch['longitude']]).addTo(mainMap);
+            marker.bindPopup(marker_template({branch:branch})).openPopup()
+        }
         return near_by;
     });
+
+    mainMap.setView([user['lat'], user['lon']], 18);
     $( "#appendedInputButton" ).autocomplete({
         source: names_data
     });
+
 }
 
+
+
 </script>
+<script>
+    $('.ui-button').click(function(){
+       $(this).parent().css('display', 'none');
+    });
+
+</script>
+{% block footer %}{% endblock %}
 
 {% endblock content %}
