@@ -8,18 +8,6 @@ import datetime
 
 search_blueprint = Blueprint("search_blueprint", __name__)
 
-def search_zip(search):
-    try:
-        if int(search.replace('%', '')) and len(search.replace('%', '')) == 5:
-            all_results = {}
-            search_results = Facilities.query.filter(Facilities.zip.like(search))
-            all_results['facilities'] = search_results.all()
-            return all_results
-
-    except ValueError:
-        return
-
-
 @search_blueprint.route("/search", methods=['POST', 'GET'])
 def search():
     if request.method == 'POST':
@@ -42,12 +30,7 @@ def search():
             if all_results['branches'] or all_results['comments']:
                 return render_template('search/results.html', results=all_results, searched=original_search)
                 
-            else:
-                zip_codes = search_zip(search_keyword)
-                if zip_codes:
-                    return render_template('search/results.html', results=zip_codes, searched=zip_codes)
-                else: 
-                    return render_template('search/no-search.html', response_message="No results found")
+            else: return render_template('search/no-search.html', response_message="No results found")
         else: 
             return render_template('search/no-search.html', response_message="No search keywords provided")
     else:

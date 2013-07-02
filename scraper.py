@@ -64,7 +64,7 @@ def branch_name_parser(dba_name):
     dba_name = dba_name.replace("ltd", "")
     dba_name = dba_name.replace(".", "") 
     dba_name = dba_name.replace(",", "")
-    dba_name = dba_name.replace("  ", " ")    
+    dba_name = dba_name.replace("  ", "")
     # Format Text here
     dba_name = dba_name.title()
   
@@ -81,36 +81,40 @@ def get_or_create(session, model, **kwargs):
         instance = model(**kwargs)
         return (True, instance)
 
+def url_name_format(*fields):
+    return '-'.join(' '.join(fields).split())
 
 def update_create_inspection(record):
     record_keys = record.keys()
     
-    branch_dictionary = {}
-    branch_dictionary['branch_name'] = branch_name_parser(extract_string(record, 'dba_name', record_keys))
-    branch_dictionary['facility_type'] = extract_string(record, 'facility_type', record_keys)
-    new_branch, branch = get_or_create(db.session, Branches, branch_name=branch_dictionary['branch_name'])    
+    branch_name = branch_name_parser(extract_string(record, 'dba_name', record_keys))
+    new_branch, branch = get_or_create(db.session, Branches, branch_name=branch_name)
+    if new_branch:
+        branch.url_name = url_name_format(branch_name)
     
-    facility_dictionary = {}
-    facility_dictionary['branch_name'] = branch_name_parser(extract_string(record, 'dba_name', record_keys))
+    facility_name = branch_name_parser(extract_string(record, 'dba_name', record_keys))
     address = extract_string(record, 'address', record_keys)
-    facility_dictionary['address'] = ' '.join(word[0].upper() + word[1:].lower() for word in address.split())
-    new_facility, facility = get_or_create(db.session, Facilities, branch_name=facility_dictionary['branch_name'], address=facility_dictionary['address'])
-    facility.aka_name = extract_string(record, 'aka_name', record_keys)
-    facility.license = extract_int(record, 'license_', record_keys)
-    facility.facility_type = strip_capitalize(extract_string(record, 'facility_type', record_keys))
-    facility.latitude, facility.longitude = extract_location(record, 'location', 'latitude', 'longitude', record_keys)
-    facility.zip = extract_int(record, 'zip', record_keys)
-    facility.state = extract_string(record, 'state', record_keys)
-    city = extract_string(record, 'city', record_keys)
-    facility.city = strip_capitalize(city)
+    address = ' '.join(word[0].upper() + word[1:].lower() for word in address.split())
+    new_facility, facility = get_or_create(db.session, Facilities, facility_name=facility_name, address=address)
+    url_name = url_name_format(facility_name, address)
+    if new_facility:
+        facility.aka_name = extract_string(record, 'aka_name', record_keys)
+        facility.license = extract_int(record, 'license_', record_keys)
+        facility.facility_type = strip_capitalize(extract_string(record, 'facility_type', record_keys))
+        facility.latitude, facility.longitude = extract_location(record, 'location', 'latitude', 'longitude', record_keys)
+        facility.zip_code = extract_int(record, 'zip', record_keys)
+        facility.state = extract_string(record, 'state', record_keys)
+        facility.city = strip_capitalize(extract_string(record, 'city', record_keys))
+        facility.url_name = url_name
     
-    inspection_dictionary = {}
-    inspection_dictionary['inspection_id'] = extract_int(record, 'inspection_id', record_keys)
-    new_inspection, inspection = get_or_create(db.session, Inspection, inspection_id=inspection_dictionary['inspection_id'])
-    inspection.risk = extract_string(record, 'risk', record_keys)
-    inspection.inspection_date = extract_date(record, 'inspection_date', record_keys)
-    inspection.inspection_type = extract_string(record, 'inspection_type', record_keys)
-    inspection.results = extract_string(record, 'results', record_keys)
+    inspection_id = extract_int(record, 'inspection_id', record_keys)
+    new_inspection, inspection = get_or_create(db.session, Inspection, inspection_id=inspection_id)
+    if new_inspection:
+        inspection.risk = extract_string(record, 'risk', record_keys)
+        inspection.inspection_date = extract_date(record, 'inspection_date', record_keys)
+        inspection.inspection_type = extract_string(record, 'inspection_type', record_keys)
+        inspection.results = extract_string(record, 'results', record_keys)
+        inspection.facility_url_name = url_name
     
     if 'violations' in record_keys:
         violation_list = record['violations'].split('|')
@@ -152,7 +156,7 @@ def update_create_inspection(record):
     if new_branch:
         db.session.add(branch)
     db.session.commit()
-    print "Commited:", branch.branch_name, 'with facility:', facility.branch_name, facility.address, inspection.inspection_id
+    print "Commited:", branch.branch_name, 'with facility:', facility.facility_name, facility.address, inspection.inspection_id
 
 def scrape():
     # db.create_all()

@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
+{% block navigation_bar %}
+{% endblock navigation_bar %}
+
 {% block content %}
 
 <style>
@@ -183,8 +186,6 @@ only screen and (min-device-pixel-ratio : 1.5) {
 
 </style>
 
-{% block navigation_bar %}
-{% endblock navigation_bar %}
   <div class="navbar navbar-fixed-top inside-map">
     <div class="navbar-inner">
       <a class="brand" href="{{ url_for('home_blueprint.show_home') }}">Chicago Food Inspections</a>
@@ -203,7 +204,7 @@ only screen and (min-device-pixel-ratio : 1.5) {
       </ul>
     </div>
   </div>
-  <div class="navbar-padding"></div>
+  <div class="navbar-padding visible-phone"></div>
 
 <div id="map">
 
@@ -251,14 +252,6 @@ only screen and (min-device-pixel-ratio : 1.5) {
  <![endif]-->
 <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
 
-<script type="html/template" id="nears-template">
-    <p>See how the restaurants near you perfom.</p>
-    <% _.each(facilities, function(facility){ %>
-        <a href="/facility/<%= facility.value %>/<%= facility.address %>"><%= facility.label %></p>
-    <% }); %>
-</script> 
-
-
 <script>
 
 var user;
@@ -271,13 +264,13 @@ L.tileLayer( osmUrl, {
 }).addTo(mainMap);
 
 
-var marker_template = _.template('<a href="/facility/<%= branch.value%>/<%= branch.address%>"><p><%= branch.label %>')
-$.get('api/branch_names', function(data) {
+var marker_template = _.template('<a href="/facility/<%= branch.url_name %>"><p><%= branch.label %>')
+$.get('api/facility_names', function(data) {
     names_data = data['objects'];
     _.each(names_data, function(branch){
-        branch['value'] = branch['branch_name'];
-        branch['label'] = branch['branch_name'] + ' » ' + branch['address'];
-        delete branch['branch_name'];
+        branch['value'] = branch['facility_name'];
+        branch['label'] = branch['facility_name'] + ' » ' + branch['address'];
+        delete branch['facility_name'];
         return branch;
     });
 

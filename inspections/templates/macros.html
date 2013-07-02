@@ -4,16 +4,10 @@
         <div class="accordion-heading">
           <div style="
                   {% if inspection.results == "Pass" %}
-                    background-image:-webkit-gradient(linear, 100% 82%, 100% 100%, from(#FFFFFF), to(#BAFFB5));
-                    background-image:-moz-linear-gradient(81% 82% 270deg,#FFFFFF, #BAFFB5);
                     background: #BAFFB5;
                   {% elif inspection.results == "Fail" %}
-                    background-image: -webkit-gradient(linear, 0% 82%, 0% 100%, from(#FFFFFF), to(#C23C3C));
-                    background-image: -moz-linear-gradient(81% 82% 270deg,#FFFFFF, #C23C3C);
                     background: #C23C3C;
                   {% else %}
-                    background-image: -webkit-gradient(linear, 0% 82%, 0% 100%, from(#FFFFFF), to(#FF7E29));
-                    background-image: -moz-linear-gradient(81% 82% 270deg,#FFFFFF, #FF7E29);
                     background: #FF7E29;
                   {% endif %}
                   ">

@@ -41,7 +41,7 @@
 
 <script type="text/template" id="inspection-record">
 	<tr class="<% if (inspection.results === 'Pass'){ %> success <% } else if( inspection.results === 'Fail'){ %> error <% } else { %> warning <% } %>">
-      <td><a class="inspection-link" href="facility/<%= inspection.facility_id %>/<%= inspection.address %>">
+      <td><a class="inspection-link" href="facility/<%= inspection.facility_url_name %>">
       <%= inspection.facility_id %></a></td>
       <td><%= inspection.inspection_date.replace('00:00:00', '') %></td>
       <td><%= inspection.results %></td>

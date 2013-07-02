@@ -6,29 +6,35 @@ inspection_violations = db.Table('inspection_violations',
     db.Column('inspection_id', db.Integer, db.ForeignKey('inspection.inspection_id')),
 )
 
+BRANCH_NAME_LEN = 100
+FACILITY_NAME_LEN = BRANCH_NAME_LEN
+ADDRESS_LEN = 100
+
 class Branches(db.Model):
-    branch_name = db.Column(db.String(100), primary_key=True)
+    branch_name = db.Column(db.String(BRANCH_NAME_LEN), primary_key=True)
     facilities = db.relationship('Facilities', backref='branches', lazy='dynamic')
+    url_name = db.Column(db.String(FACILITY_NAME_LEN + ADDRESS_LEN), unique=True)
 
     def __init__(self, branch_name):
         self.branch_name = branch_name
 
 class Facilities(db.Model):
-    branch_name = db.Column(db.String(100), primary_key=True)
-    address = db.Column(db.String(100), primary_key=True)
-    aka_name = db.Column(db.String(100))
+    facility_name = db.Column(db.String(FACILITY_NAME_LEN), primary_key=True)
+    url_name = db.Column(db.String(FACILITY_NAME_LEN + ADDRESS_LEN), unique=True)
+    address = db.Column(db.String(ADDRESS_LEN), primary_key=True)
+    aka_name = db.Column(db.String(FACILITY_NAME_LEN))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    zip = db.Column(db.Integer)
-    state = db.Column(db.String(10))
-    city = db.Column(db.String(50))
+    zip_code = db.Column(db.Integer)
+    state = db.Column(db.String(5))
+    city = db.Column(db.String(15))
     license = db.Column(db.Integer)
-    facility_type = db.Column(db.String(100))
+    facility_type = db.Column(db.String(30))
     inspections = db.relationship('Inspection', backref='facilities', lazy='dynamic')
-    branch_id = db.Column(db.String(100), db.ForeignKey('branches.branch_name'))
+    branch_id = db.Column(db.String(BRANCH_NAME_LEN), db.ForeignKey('branches.branch_name'))
     
-    def __init__(self, branch_name, address):
-        self.branch_name = branch_name
+    def __init__(self, facility_name, address):
+        self.facility_name = facility_name
         self.address = address
         
 
@@ -42,17 +48,19 @@ class Violations(db.Model):
         
 class Inspection(db.Model):
     inspection_id = db.Column(db.Integer, primary_key=True)
-    risk = db.Column(db.String(100))
+    risk = db.Column(db.String(17))
     inspection_date = db.Column(db.DateTime)
-    inspection_type = db.Column(db.String(100))
-    results = db.Column(db.String(100))
+    inspection_type = db.Column(db.String(50))
+    results = db.Column(db.String(25))
     violations_count = db.Column(db.Integer)
     violations = db.relationship('Violations', secondary=inspection_violations, backref=db.backref('inspection', lazy='dinamic'))
-    facility_id = db.Column(db.String(100), db.ForeignKey('facilities.branch_name'))
+    facility_id = db.Column(db.String(FACILITY_NAME_LEN), db.ForeignKey('facilities.facility_name'))
+    facility_url_name = db.Column(db.String(FACILITY_NAME_LEN + ADDRESS_LEN))
     comments = db.relationship('InspectionComments', backref='inspection', lazy='dinamic')
     
     def __init__(self, inspection_id):
         self.inspection_id = inspection_id
+
         
 class InspectionComments(db.Model):
     id = db.Column(db.Integer,primary_key=True)
@@ -68,8 +76,8 @@ api_violations_blueprint = manager.create_api(Violations, methods=['GET'], resul
 
 api_branches_blueprint = manager.create_api(Branches, methods=['GET'])
 
-api_facilities_blueprint = manager.create_api(Facilities, methods=['GET'], results_per_page=50, include_columns=['latitude','branch_name','longitude',  'inspections', 'inspections.results'])
+api_facilities_blueprint = manager.create_api(Facilities, methods=['GET'], results_per_page=50, include_columns=['latitude','facility_name','longitude', 'inspections', 'inspections.results'])
 
 api_comments_blueprint = manager.create_api(InspectionComments, methods=['GET'])
 
-api_branches_names_blueprint = manager.create_api(Facilities, methods=['GET'], include_columns=['branch_name','latitude','longitude', 'address'], collection_name='branch_names', results_per_page=None)
+api_branches_names_blueprint = manager.create_api(Facilities, methods=['GET'], include_columns=['facility_name', 'url_name','latitude','longitude', 'address'], collection_name='facility_names', results_per_page=None)

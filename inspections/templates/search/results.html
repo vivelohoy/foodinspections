@@ -8,7 +8,7 @@
     <dl class="dl-horizontal hit">
       <dt>{{ result.branch_name  }}</dt>
       {% for facility in result.facilities %}
-      <dd><a href="{{ url_for('facility_blueprint.show_facility', facility_name=facility.branch_name, address=facility.address) }}">{{ facility.address }}</a></dd>
+      <dd><a href="{{ url_for('facility_blueprint.show_facility', url_name=facility.url_name) }}">{{ facility.address }}</a></dd>
       {% endfor %}
     </dl>
   </div>

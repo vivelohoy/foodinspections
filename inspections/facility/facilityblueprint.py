@@ -4,7 +4,7 @@ from inspections.models.models import *
 
 facility_blueprint = Blueprint("facility_blueprint", __name__)
 
-@facility_blueprint.route("/facility/<facility_name>/<address>")
-def show_facility(facility_name, address):
-    data = Facilities.query.get((str(facility_name),str(address)))
+@facility_blueprint.route("/facility/<url_name>")
+def show_facility(url_name):
+    data = Facilities.query.filter_by(url_name=url_name).first_or_404()
     return render_template("facility/single-facility.html", facility=data )
