@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 from flask.ext.sqlalchemy import *
 from flask.ext.restless import APIManager
 from logging import FileHandler
-from flask.ext.cache import Cache
 import logging
 application = Flask(__name__)
 
@@ -15,7 +14,6 @@ application.logger.addHandler(file_handler)
 
 db = SQLAlchemy(application)
 manager = APIManager(application, flask_sqlalchemy_db=db)
-cache = Cache(application, config={'CACHE_TYPE': 'simple'})
 
 @application.errorhandler(404)
 def not_found(error):
