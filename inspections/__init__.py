@@ -3,6 +3,11 @@ from flask.ext.sqlalchemy import *
 from flask.ext.restless import APIManager
 from logging import FileHandler
 import logging
+from flask.ext.cache import Cache
+from werkzeug.contrib.cache import MemcachedCache
+
+CACHE_TIMEOUT = 60 * 5
+
 application = Flask(__name__)
 
 application.config.from_object('config')
@@ -14,6 +19,7 @@ application.logger.addHandler(file_handler)
 
 db = SQLAlchemy(application)
 manager = APIManager(application, flask_sqlalchemy_db=db)
+cache = Cache(application)
 
 @application.errorhandler(404)
 def not_found(error):
@@ -22,6 +28,20 @@ def not_found(error):
 @application.template_filter('startswith')
 def startswith_filter(s, l):
     return s.startswith(l)
+
+@application.before_request
+def return_cached():
+    # if GET and POST not empty
+    if not request.values and not request.path.startswith('/static') and not request.path.startswith('/search'):
+        response = cache.get(request.path)
+        if response: 
+            return response
+
+@application.after_request
+def cache_response(response):
+    if not request.values and not request.path.startswith('/static') and not request.path.startswith('/search'):
+        cache.set(request.path, response, timeout=CACHE_TIMEOUT)
+    return response
 
 from inspections.violations.violationsblueprint import violations_blueprint
 from inspections.inspection.inspection import inspection_blueprint

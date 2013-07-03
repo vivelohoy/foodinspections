@@ -10,4 +10,13 @@ if 'RDS_HOSTNAME' in os.environ:
 else:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'inspections.db')
 
+if 'CACHE_SERVER' in os.environ:
+    CACHE_TYPE = 'memcached'
+    CACHE_DEFAULT_TIMEOUT = 604800 # 7 days
+    CACHE_MEMCACHED_SERVERS = [os.environ['CACHE_SERVERS']]
+    CACHE_KEY_PREFIX = 'foodinspections'
+
+#else:
+#    CACHE_TYPE = 'simple'
+
 THREADS_PER_PAGE = 8
