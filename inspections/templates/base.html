@@ -2,14 +2,6 @@
 <html>
 <head>
 {% block header %} {% include "header.html" %} {% include "js-header.html" %}  {% endblock %}
-</head>
-<body>
-
-{% block navigation_bar %} {% include "nav-bar.html" %} {% endblock navigation_bar %}
-
-{% block content %} {% endblock content %}
-
-{% block footer %} {% include 'footer.html' %} {% endblock footer %}
 
 {% block analytics %}
 
@@ -25,5 +17,17 @@
 </script>
 
 {% endblock analytics %}
+
+</head>
+<body>
+
+{% block navigation_bar %} {% include "nav-bar.html" %} {% endblock navigation_bar %}
+
+{% block content %} {% endblock content %}
+
+{% block footer %} {% include 'footer.html' %} {% endblock footer %}
+
+{% block analytics %}
+
 </body>
 </html>
