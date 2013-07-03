@@ -4,7 +4,7 @@ from flask.ext.restless import APIManager
 from logging import FileHandler
 import logging
 from flask.ext.cache import Cache
-from werkzeug.contrib.cache import MemcachedCache
+
 
 CACHE_TIMEOUT = 60 * 5
 
