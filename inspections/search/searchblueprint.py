@@ -9,6 +9,7 @@ search_blueprint = Blueprint("search_blueprint", __name__)
 
 def search_db(search_keyword, original_search):
     keyword = search_keyword
+    keyword = keyword.replace(' ', '-')
     rendered = cache.get( 'Searched-' + keyword)
     if rendered is None:
         search_keyword = '%' + search_keyword + '%'
