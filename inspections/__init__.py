@@ -41,6 +41,7 @@ def return_cached():
 def cache_response(response):
     if not request.values and not request.path.startswith('/static') and not request.path.startswith('/search'):
         cache.set(request.path, response, timeout=CACHE_TIMEOUT)
+    response.headers['Cache-Control'] = 'public, max-age=43200'
     return response
 
 from inspections.violations.violationsblueprint import violations_blueprint
