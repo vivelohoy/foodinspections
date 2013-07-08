@@ -179,11 +179,6 @@ only screen and (-webkit-min-device-pixel-ratio : 1.5),
 only screen and (min-device-pixel-ratio : 1.5) {
 /* Styles */
 }
-<p class="lead text-center home-p">In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> establishments passed and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</p>
-
-
-
-
 </style>
 
   <div class="navbar navbar-fixed-top inside-map">
@@ -260,91 +255,87 @@ only screen and (min-device-pixel-ratio : 1.5) {
 var user;
 var names_data;
 var mainMap = L.map('map').setView([41.8500, -87.6500],13); // Chicago coordinates
+
 var osmUrl = 'http://{s}.tile.cloudmade.com/96843c61d97c48e9b100508c96fb01cb/997/256/{z}/{x}/{y}.png'
 L.tileLayer( osmUrl, {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
     maxZoom: 18
 }).addTo(mainMap);
 
+getLocation();
 
-var marker_template = _.template('<a href="/facility/<%= branch.url_name %>"><p><%= branch.label %>')
-$.get('api/facility_names', function(data) {
-    names_data = data['objects'];
-    _.each(names_data, function(branch){
-        branch['value'] = branch['facility_name'];
-        branch['label'] = branch['facility_name'] + ' » ' + branch['address'];
-        delete branch['facility_name'];
-        return branch;
-    });
-
-    getLocation();
-
-});
-
-function near(user, branch, distance){ 
-    var branch_r_latitude = (branch['latitude'] * Math.PI)/180
-    var branch_r_longitude = (branch['longitude'] * Math.PI)/180
-    var user_r_lat = (user['lat'] * Math.PI)/180
-    var user_r_lon = (user['lon'] * Math.PI)/180
-    value =  3959 * Math.acos( Math.cos( user_r_lat ) * Math.cos( branch_r_latitude ) * Math.cos( branch_r_longitude  - (user_r_lon) ) + Math.sin( user_r_lat ) * Math.sin(  branch_r_latitude  ) ) ;
-    return value < distance;
-}
+var marker_template = _.template('<a href="/facility/<%= facility.url_name %>"><p><%= facility.label %>')
 
 function noLocationData(e){
     console.log('Pop up here');
-    
-    _.each(names_data, function(branch){
-        delete branch['latitude'];
-        delete branch['longitude'];
-        delete branch['address'];
-        return branch;
-    });
-
-    names_data = names_data.splice(0,Math.ceil(names_data.length / 2))
-
-    $( "#appendedInputButton" ).autocomplete({
-        source: names_data
-    });
     $('#looking').remove();
 }
 
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(returnData, noLocationData);
+        navigator.geolocation.getCurrentPosition(returnDataSquare, noLocationData);
     }
     else{
         console.log('Geolocation not Supported.');
     }
 };
 
-function returnData(data){
+function returnDataSquare(data){
     coor_data = data['coords']
     user = {'lat': coor_data['latitude'],'lon': coor_data['longitude']};
     $('#looking').remove();
-    names_data = _.filter(names_data, function(branch){
-        var near_by = near(user, branch, .2);
-        if (near_by){ 
-            var marker = L.marker([branch['latitude'],branch['longitude']]).addTo(mainMap);
-            marker.bindPopup(marker_template({branch:branch})).openPopup()
-        }
-        return near_by;
+
+    var x = user.lat;
+    var y = user.lon;
+    var k = .005;
+    var topRight = {'lat': x + k, 'lon': y + k};
+    var topLeft = {'lat': x + k, 'lon': y - k};
+    var bottomRight = {'lat': x - k, 'lon': y + k};
+    var bottomLeft = {'lat': x - k, 'lon': y - k};
+    
+    /*
+    var t = L.marker([topRight.lat, topRight.lon]).addTo(mainMap).bindPopup('Top Right').openPopup();
+    t = L.marker([topLeft.lat, topLeft.lon]).addTo(mainMap).bindPopup('Top Left').openPopup();
+    t = L.marker([bottomRight.lat, bottomRight.lon]).addTo(mainMap).bindPopup('Bottom Right').openPopup();
+    t = L.marker([bottomLeft.lat, bottomLeft.lon]).addTo(mainMap).bindPopup('Bottom Left').openPopup();
+    */
+
+    var filters = [{"name":"latitude","op":"le","val":topRight.lat},{"name":"latitude","op":"ge","val":bottomRight.lat},{"name":"longitude","op":"ge","val":bottomLeft.lon},{"name":"longitude","op":"le","val":bottomRight.lon}
+]
+    $.ajax({
+      url: '/api/facility_names',
+      data: {"q": JSON.stringify({"filters": filters})},
+      dataType: "json",
+      contentType: "application/json",
+      success: function(response_data) {
+        names_data = response_data['objects'];
+        
+        _.each(names_data, function(facility){
+            facility['value'] = facility['facility_name'];
+            facility['label'] = facility['facility_name'] + ' » ' + facility['address'];
+            delete facility['facility_name'];
+            var marker = L.marker([facility['latitude'],facility['longitude']]).addTo(mainMap);
+            marker.bindPopup(marker_template({facility:facility}))
+            delete facility['latitude'];
+            delete facility['longitude']
+        });
+
+        $( "#appendedInputButton" ).autocomplete({
+            source: names_data
+        });
+      }
+
     });
 
-    mainMap.setView([user['lat'], user['lon']], 18);
-    console.log(names_data);
-    $( "#appendedInputButton" ).autocomplete({
-        source: names_data
-    });
+    mainMap.setView([user['lat'], user['lon']], 16);
 }
 
-
-
 </script>
+
 <script>
     $('.ui-button').click(function(){
        $(this).parent().css('display', 'none');
     });
-
 </script>
 {% block footer %}{% endblock %}
 
