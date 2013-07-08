@@ -2,10 +2,10 @@ import requests, json
 from datetime import datetime
 from inspections import *
 from inspections.models.models import *
+from failedtweet import tweet_failed
 
 API_ENDPOINT = "http://data.cityofchicago.org/resource/4ijn-s7e5.json"
 API_LIMIT = 1000
-
 
 def extract_string(data, data_query, keys):
 	if data_query in keys:
@@ -149,6 +149,7 @@ def update_create_inspection(record):
     
     if new_inspection:
         db.session.add(inspection)
+        #tweet_failed(inspection) uncommented for now until we pick a twitter username
     
     if new_facility:
         db.session.add(facility)
@@ -156,10 +157,10 @@ def update_create_inspection(record):
     if new_branch:
         db.session.add(branch)
     db.session.commit()
+
     print "Commited:", branch.branch_name, 'with facility:', facility.facility_name, facility.address, inspection.inspection_id
 
 def scrape():
-    # db.create_all()
     parameters = {}
     parameters['$limit'] = 1000
     parameters['$offset'] = 0
