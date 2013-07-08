@@ -234,21 +234,24 @@ only screen and (min-device-pixel-ratio : 1.5) {
             </li>
         </ul>
 
-        <p>
-            Developed by Hoy Publications LLC.
-        </p>
+        <p>Developed by Hoy Publications LLC.</p>
     </div>
 </div>
 
 
 
 <link href="{{ url_for('static', filename='css/searchtemplate.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/searchtemplate.min.css') }}" rel="stylesheet">
+
 <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
  <!--[if lte IE 8]>
      <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
  <![endif]-->
 <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+
+<link href="/static/css/leaflet.awesome-markers.css" rel="stylesheet">
+<script src="/static/js/leaflet.awesome-markers.min.js"></script>
 
 <script>
 
@@ -261,6 +264,12 @@ L.tileLayer( osmUrl, {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
     maxZoom: 18
 }).addTo(mainMap);
+
+
+var redMarker = L.AwesomeMarkers.icon({
+  icon: 'icon-user', 
+  color: 'red'
+});
 
 getLocation();
 
@@ -327,7 +336,8 @@ function returnDataSquare(data){
 
     });
 
-    mainMap.setView([user['lat'], user['lon']], 16);
+    mainMap.setView([user['lat'], user['lon']], 17);
+    L.marker([user['lat'], user['lon']], {icon: redMarker}).addTo(mainMap).bindPopup('You!').openPopup();
 }
 
 </script>
