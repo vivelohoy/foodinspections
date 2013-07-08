@@ -1,14 +1,10 @@
+{% import 'macros.html' as macros with context %}
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <a class="brand" href="{{ url_for('home_blueprint.show_home') }}">Chicago Food Inspections</a>
       <ul class="nav">
         <li>
-          <form style="margin: 4px;" class="" action="{{ url_for('search_blueprint.search') }}" method="post">
-              <div class="input-append">
-                <input placeholder="i.e. Burger King"  name="main-data" class="span6" id="appendedInputButton" type="text">
-                <button class="btn btn-danger" type="submit">Search</button>
-              </div>
-          </form>
+            {{ macros.search_bar() }}
         </li>
       </ul>
     </div>

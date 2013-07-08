@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% import 'macros.html' as macros with context %}
 {% block navigation_bar %}
 {% endblock navigation_bar %}
 
@@ -49,6 +49,7 @@ button.ui-button-left {
   position: absolute;
   top: 0;
   left: 0;
+
 }
 .home-p a b{
     vertical-align: bottom;    
@@ -186,12 +187,7 @@ only screen and (min-device-pixel-ratio : 1.5) {
       <a class="brand" href="{{ url_for('home_blueprint.show_home') }}">Chicago Food Inspections</a>
       <ul class="nav">
         <li>
-          <form style="margin: 4px;" class="" action="{{ url_for('search_blueprint.search') }}" method="post">
-              <div class="input-append">
-                <input placeholder="i.e. Burger King"  name="main-data" class="span6" autocomplete='on' id="appendedInputButton" type="text">
-                <button class="btn btn-danger" type="submit">Search</button>
-              </div>
-          </form>
+            {{ macros.search_bar() }}
         </li>
         <li>
             <small>In the last month, <a href="/inspections#passed"><b>{{ passed }}</b></a> establishments passed and <a href="inspections#failed"><b>{{ failed }}</b></a> failed!</small>

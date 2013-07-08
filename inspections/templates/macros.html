@@ -184,3 +184,12 @@
     {{ inspection_info(inspection, i) }}
 
 {%- endmacro %}
+
+{% macro search_bar() -%}
+<form style="margin: 4px;" action="{{ url_for('search_blueprint.search') }}" method="get">
+    <div class="input-append">
+        <input placeholder="i.e. Burger King"  name="q" class="span6" id="appendedInputButton" type="text">
+        <button class="btn btn-danger" type="submit">Search</button>
+    </div>
+</form>
+{%- endmacro %}
