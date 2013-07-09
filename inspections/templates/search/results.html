@@ -17,7 +17,7 @@
 {% for comment in results['comments'] %}
   <dl class="dl-horizontal hit">
     <dt>{{ comment.inspection.facility_id }}</dt>
-    <dd><a href="{{ url_for('inspection_blueprint.show_inspection', id=comment.inspection.inspection_id ) }}">{{ comment.comment }}</a></dd>
+    <dd><a href="{{ url_for('facility_blueprint.show_facility', url_name=comment.inspection.facility_url_name) }}">{{ comment.comment }}</a></dd>
   </dl>
 {% endfor %}
 
