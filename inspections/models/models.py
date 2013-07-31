@@ -19,9 +19,9 @@ class Branches(db.Model):
         self.branch_name = branch_name
 
 class Facilities(db.Model):
-    facility_name = db.Column(db.String(FACILITY_NAME_LEN), primary_key=True)
-    url_name = db.Column(db.String(FACILITY_NAME_LEN + ADDRESS_LEN), unique=True)
-    address = db.Column(db.String(ADDRESS_LEN), primary_key=True)
+    url_name = db.Column(db.String(FACILITY_NAME_LEN + ADDRESS_LEN),primary_key=True)
+    facility_name = db.Column(db.String(FACILITY_NAME_LEN))
+    address = db.Column(db.String(ADDRESS_LEN))
     aka_name = db.Column(db.String(FACILITY_NAME_LEN))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
@@ -33,9 +33,8 @@ class Facilities(db.Model):
     inspections = db.relationship('Inspection', backref='facilities', lazy='dynamic')
     branch_id = db.Column(db.String(BRANCH_NAME_LEN), db.ForeignKey('branches.branch_name'))
     
-    def __init__(self, facility_name, address):
-        self.facility_name = facility_name
-        self.address = address
+    def __init__(self, url_name):
+        self.url_name = url_name
         
 
 class Violations(db.Model):
@@ -54,8 +53,8 @@ class Inspection(db.Model):
     results = db.Column(db.String(25))
     violations_count = db.Column(db.Integer)
     violations = db.relationship('Violations', secondary=inspection_violations, backref=db.backref('inspection', lazy='dinamic'))
-    facility_id = db.Column(db.String(FACILITY_NAME_LEN), db.ForeignKey('facilities.facility_name'))
-    facility_url_name = db.Column(db.String(FACILITY_NAME_LEN + ADDRESS_LEN))
+    facility_id = db.Column(db.String(FACILITY_NAME_LEN), db.ForeignKey('facilities.url_name'))
+    facility_name = db.Column(db.String(FACILITY_NAME_LEN))
     comments = db.relationship('InspectionComments', backref='inspection', lazy='dinamic')
     
     def __init__(self, inspection_id):

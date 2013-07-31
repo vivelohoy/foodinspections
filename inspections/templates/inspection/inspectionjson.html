@@ -6,7 +6,7 @@
                 "inspection_date": "{{ inspection.inspection_date }}",
                 "facility_id": "{{ inspection.facility_id }}",
                 "address": "{{ inspection.facilities.address }}",
-                "facility_url_name": "{{ inspection.facility_url_name }}"
+                "facility_name": "{{ inspection.facility_name }}"
         }{% if not loop.last %},{% endif %}{% endfor %}
     ]
 }

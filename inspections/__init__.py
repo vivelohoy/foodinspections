@@ -1,21 +1,13 @@
 from flask import Flask, render_template, request
 from flask.ext.sqlalchemy import *
 from flask.ext.restless import APIManager
-from logging import FileHandler
-import logging
 from flask.ext.cache import Cache
-
 
 CACHE_TIMEOUT = 60 * 5
 
 application = Flask(__name__)
 
 application.config.from_object('config')
-
-file_handler = FileHandler('search.log', )
-file_handler.setLevel(logging.INFO)
-
-application.logger.addHandler(file_handler)
 
 db = SQLAlchemy(application)
 manager = APIManager(application, flask_sqlalchemy_db=db)

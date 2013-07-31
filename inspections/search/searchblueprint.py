@@ -36,7 +36,7 @@ def search():
         if 'q' in request.args:
             original_search = request.args['q']
             length_of_search = len(original_search)
-            application.logger.info('Searched for: %s at %s' % (original_search, datetime.datetime.today()))
+
             if length_of_search <= 3: # Query too big to perform on sane time
                 return render_template('search/no-search.html', response_message="Search term too short")
             search_keyword = request.args['q'].replace('\'', '').replace('"', '').replace('<', '').replace('>', '')

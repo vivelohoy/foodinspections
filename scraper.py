@@ -2,7 +2,7 @@ import requests, json
 from datetime import datetime
 from inspections import *
 from inspections.models.models import *
-from failedtweet import tweet_failed
+#from failedtweet import tweet_failed
 
 API_ENDPOINT = "http://data.cityofchicago.org/resource/4ijn-s7e5.json"
 API_LIMIT = 1000
@@ -95,8 +95,8 @@ def update_create_inspection(record):
     facility_name = branch_name_parser(extract_string(record, 'dba_name', record_keys))
     address = extract_string(record, 'address', record_keys)
     address = ' '.join(word[0].upper() + word[1:].lower() for word in address.split())
-    new_facility, facility = get_or_create(db.session, Facilities, facility_name=facility_name, address=address)
     url_name = url_name_format(facility_name, address)
+    new_facility, facility = get_or_create(db.session, Facilities, url_name=url_name)
     if new_facility:
         facility.aka_name = extract_string(record, 'aka_name', record_keys)
         facility.license = extract_int(record, 'license_', record_keys)
@@ -105,7 +105,8 @@ def update_create_inspection(record):
         facility.zip_code = extract_int(record, 'zip', record_keys)
         facility.state = extract_string(record, 'state', record_keys)
         facility.city = strip_capitalize(extract_string(record, 'city', record_keys))
-        facility.url_name = url_name
+        facility.facility_name = facility_name
+        facility.address = address
     
     inspection_id = extract_int(record, 'inspection_id', record_keys)
     new_inspection, inspection = get_or_create(db.session, Inspection, inspection_id=inspection_id)
@@ -115,6 +116,7 @@ def update_create_inspection(record):
         inspection.inspection_type = extract_string(record, 'inspection_type', record_keys)
         inspection.results = extract_string(record, 'results', record_keys)
         inspection.facility_url_name = url_name
+        inspection.facility_name = facility_name
     
     if 'violations' in record_keys:
         violation_list = record['violations'].split('|')

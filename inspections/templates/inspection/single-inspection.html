@@ -1,7 +1,7 @@
 {% extends "single.html" %}
 {% import 'macros.html' as macros with context %}
 {% block single_content %}
-	<h4 class="text-center">{{ inspection.facility_id }}</h4>
+	<h4 class="text-center">{{ inspection.facility_name }}</h4>
 	<h5 class="text-center">{{ inspection.facilities.address }}</h5>
     <p class="text-center"><span class="label
         {% if inspection.risk == 'Risk 1 (High)' %}
@@ -14,7 +14,7 @@
       ">{{ inspection.risk }}</span>
     </p>
 
-    {{ macros.inspection(inspection, i) }}
+    {{ macros.inspection(inspection,1) }}
 
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>	
