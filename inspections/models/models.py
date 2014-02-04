@@ -52,10 +52,10 @@ class Inspection(db.Model):
     inspection_type = db.Column(db.String(50))
     results = db.Column(db.String(25))
     violations_count = db.Column(db.Integer)
-    violations = db.relationship('Violations', secondary=inspection_violations, backref=db.backref('inspection', lazy='dinamic'))
+    violations = db.relationship('Violations', secondary=inspection_violations, backref=db.backref('inspection', lazy='dynamic'))
     facility_id = db.Column(db.String(FACILITY_NAME_LEN), db.ForeignKey('facilities.url_name'))
     facility_name = db.Column(db.String(FACILITY_NAME_LEN))
-    comments = db.relationship('InspectionComments', backref='inspection', lazy='dinamic')
+    comments = db.relationship('InspectionComments', backref='inspection', lazy='dynamic')
     
     def __init__(self, inspection_id):
         self.inspection_id = inspection_id
