@@ -6,20 +6,35 @@ An app for people to see what Chicago's food is like
 Installation
 ============
 
-    git clone https://github.com/vivelohoy/foodinspections.git
-    cd /path/to/foodinspections
-    pip install -r requirements.txt 
+    mkdir -p /opt/python/run
+    mkdir -p /opt/python/current
+    cd /opt/python/run
+    virtualenv venv
+    source venv/bin/activate
+    cd /opt/python/current
+    git clone https://github.com/vivelohoy/foodinspections.git app
+    cd app
+    pip install -r requirements.txt
+
+At this point, you have the basic Python library requirements set up. You'll now need to set the proper environment variables for your RDS instance running MySQL. Use the file `secretsrc.template` and fill in the missing details. Then copy this to your home directory like so:
+
+    cp secretsrc.template ~/.secretsrc
+
+Add the following line to the end of your `.bashrc` file to add these environment variables to your shell:
+
+    source ~/.secretsrc
+
+You can either log out/in or run `source ~/.bashrc` to apply these changes. When the environment variables are set (you can check this by running `env | grep RDS`), run the application server:
+
     python application.py
     
 You should now see something like:
 
     * Running on http://127.0.0.1:5000/
 
-If you visit localhost:5000(or whatever port your terminal displays) on your web browser, you should see the templates without any data on them. Navigating to links like the violations, from the navigation bar will cause errors. That's because we don't have any data yet.
+If you visit [http://127.0.0.1:5000/](http://127.0.0.1:5000/) on your web browser, you should see the templates without any data on them. Navigating to links from the navigation bar will cause errors. That's because we don't have any data yet.
 
-To fix this problem first we stop our server.
-
-    Note: To stop the server you can always press ctrl+c
+To fix this problem we must first stop our server. To stop the server you can always press CTRL-c.
     
 Now run: 
 
@@ -29,31 +44,22 @@ The database has been created and you are ready to scrape:
 
     python scraper.py
     
-After a couple of hours you should have the database with all the records. You can though not recommended hit ctrl+c during the scrape to finish the script prematurely and start looking at some data.
+After a couple of hours you should have the database with all the records. You can (though not recommended) hit CTRL-c during the scrape to finish the script prematurely and start looking at some data.
 
-After finishing the scrape run python application.py again and have fun.
+After finishing the scrape run `python application.py` again and have fun.
 
-Reloading Data
-==============
+Scheduling Nightly Scrape
+=========================
 
-If you want to reload the data, you must first drop the records you downloaded previously as the scraper will pull in all new data from the beginning of time to the present day and the scraper gets tripped up if there are duplicate records.
+Included is a crontab configuration to download data on a nightly basis at midnight. The configuration is found in `crontab.backup`:
 
-If you're using the local SQLite database file you can simply delete the file and re-create it with:
+    #MAILTO="support@vivelohoy.com"
+    0 0 * * * /opt/python/current/app/cron.sh
 
-    python createdb.py
+This assumes that you have this application installed in the path `/opt/python/current/app` and that you have a virtualenv created for the project, with requirements installed, located in `/opt/python/run/venv`.
 
-If you've deployed this to an Amazon EC2 instance that's using an RDS instance for the database, you need to delete records in the relevant tables on that database server. First SSH to the EC2 instance where you should have environment variables set to the RDS connection details. Connect to the MySQL server with the command:
+Uncomment the first line of the `crontab.backup` file and change the email address there if you want the cron job output to be emailed somewhere automatically.
 
-    mysql --user=$RDS_USERNAME --password=$RDS_PASSWORD --host=$RDS_HOSTNAME $RDS_DB_NAME
+Import the crontab configuration with:
 
-At the MySQL prompt, first delete all records from the `inspection_violations` table:
-
-    DELETE FROM inspection_violations WHERE 1;
-
-Follow this by deleting all records from the `violations` table:
-
-    DELETE FROM violations WHERE 1;
-
-Exit out of the MySQL shell. Now change directory to where you have this repository cloned on the server, activate your virtual environment, and re-run the scraper with:
-
-    python scraper.py
+    crontab crontab.backup 

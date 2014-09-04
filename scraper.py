@@ -160,12 +160,16 @@ def update_create_inspection(record):
         db.session.add(branch)
     db.session.commit()
 
-    print "Commited:", branch.branch_name, 'with facility:', facility.facility_name, facility.address, inspection.inspection_id
+    if new_inspection
+        print "Committed:", branch.branch_name, 'with facility:', facility.facility_name, facility.address, inspection.inspection_id
+
+    return new_inspection
 
 def scrape():
     parameters = {}
     parameters['$limit'] = 1000
     parameters['$offset'] = 0
+    new_record_count = 0
     while (True):
         data = requests.get(API_ENDPOINT, params=parameters)
         if data.status_code != requests.codes.ok:
@@ -176,7 +180,12 @@ def scrape():
         parameters['$offset'] += 1000
         print "Fetched", data.url
         for record in json_data:
-          update_create_inspection(record)
+        new_inspection = update_create_inspection(record)
+        if new_inspection:
+            new_record_count += 1
+        else: 
+            print "Imported {0} new records.".format(new_record_count)
+            return
 
 def create_db():
 	db.create_all()

@@ -15,8 +15,7 @@ if 'CACHE_SERVER' in os.environ:
     CACHE_DEFAULT_TIMEOUT = 604800 # 7 days
     CACHE_MEMCACHED_SERVERS = [os.environ['CACHE_SERVERS']]
     CACHE_KEY_PREFIX = 'foodinspections'
-
-#else:
-#    CACHE_TYPE = 'simple'
+else:
+    CACHE_TYPE = 'simple'
 
 THREADS_PER_PAGE = 8

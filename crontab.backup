@@ -1,0 +1,2 @@
+#MAILTO="support@vivelohoy.com"
+0 0 * * * /opt/python/current/app/cron.sh
