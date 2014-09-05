@@ -3,6 +3,7 @@ from datetime import datetime
 from inspections import *
 from inspections.models.models import *
 #from failedtweet import tweet_failed
+from email_notify import send_email
 
 API_ENDPOINT = "http://data.cityofchicago.org/resource/4ijn-s7e5.json"
 API_LIMIT = 1000
@@ -185,6 +186,10 @@ def scrape():
             new_record_count += 1
         else: 
             print "Imported {0} new records.".format(new_record_count)
+            send_email(to="Hoy Support <support@vivelohoy.com>",
+                       _from=None,
+                       subject="eatsafe.co Import: Imported {0} new records.".format(new_record_count),
+                       body="eatsafe.co Import: Imported {0} new records.".format(new_record_count))            
             return
 
 def create_db():
