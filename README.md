@@ -33,10 +33,10 @@ In the `foodinspections` folder, run (this only needs to be done once per machin
 
 When you're ready to deploy the new code, run:
 
-    eb push
+    eb deploy
 
 ## TODO
 
 * How to set up from scratch
 * How to use RDS
-* How to schedule nightly run of scraper.py through Elastic Beanstalk
+* How to schedule scraper.py to run nightly
