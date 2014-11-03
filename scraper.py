@@ -2,7 +2,6 @@ import requests, json
 from datetime import datetime
 from inspections import *
 from inspections.models.models import *
-#from failedtweet import tweet_failed
 from email_notify import send_email
 
 API_ENDPOINT = "http://data.cityofchicago.org/resource/4ijn-s7e5.json"
@@ -152,7 +151,6 @@ def update_create_inspection(record):
     
     if new_inspection:
         db.session.add(inspection)
-        #tweet_failed(inspection) uncommented for now until we pick a twitter username
     
     if new_facility:
         db.session.add(facility)
