@@ -1,8 +1,8 @@
-.elasticbeanstalk/
 *.pyc
 .DS_Store
 *.swp
 *.db
+venv
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
