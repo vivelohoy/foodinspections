@@ -1,65 +1,42 @@
-Food Inspections
-===============
+# Food Inspections
 
-An app for people to see what Chicago's food is like
+An app for people to see what Chicago's food is like.
 
-Installation
-============
+## Develop
 
-    mkdir -p /opt/python/run
-    mkdir -p /opt/python/current
-    cd /opt/python/run
-    virtualenv venv
-    source venv/bin/activate
-    cd /opt/python/current
-    git clone https://github.com/vivelohoy/foodinspections.git app
-    cd app
+After cloning this repository, create a virtual environment and install the requirements:
+
+    virtualenv venv && source venv/bin/activate
     pip install -r requirements.txt
 
-At this point, you have the basic Python library requirements set up. You'll now need to set the proper environment variables for your RDS instance running MySQL. Use the file `secretsrc.template` and fill in the missing details. Then copy this to your home directory like so:
+You'll need to create a local copy of the database. Do this with:
 
-    cp secretsrc.template ~/.secretsrc
+    python createdb.py
 
-Add the following line to the end of your `.bashrc` file to add these environment variables to your shell:
+After the `inspections.db` SQLite database file is created, you must populate it with real data. Run the scraper with:
 
-    source ~/.secretsrc
+    python scraper.py
 
-You can either log out/in or run `source ~/.bashrc` to apply these changes. When the environment variables are set (you can check this by running `env | grep RDS`), run the application server:
+Run the application server with:
 
     python application.py
     
-You should now see something like:
+Open the application in your browser using the address http://127.0.0.1:5000/
 
-    * Running on http://127.0.0.1:5000/
+## Deploy
 
-If you visit [http://127.0.0.1:5000/](http://127.0.0.1:5000/) on your web browser, you should see the templates without any data on them. Navigating to links from the navigation bar will cause errors. That's because we don't have any data yet.
+This application is designed to run on [AWS](https://aws.amazon.com/) using the [Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) service. In order to deploy, you need to have the [awsebcli](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-getting-set-up.html) client installed on your system and have the AWS access key ID and secret access key.
 
-To fix this problem we must first stop our server. To stop the server you can always press CTRL-c.
-    
-Now run: 
+In the `foodinspections` folder, run (this only needs to be done once per machine):
 
-    python createdb.py
-    
-The database has been created and you are ready to scrape:
+    eb init
 
-    python scraper.py
-    
-After a couple of hours you should have the database with all the records. You can (though not recommended) hit CTRL-c during the scrape to finish the script prematurely and start looking at some data.
+When you're ready to deploy the new code, run:
 
-After finishing the scrape run `python application.py` again and have fun.
+    eb push
 
-Scheduling Nightly Scrape
-=========================
+## TODO
 
-Included is a crontab configuration to download data on a nightly basis at midnight. The configuration is found in `crontab.backup`:
-
-    #MAILTO="support@vivelohoy.com"
-    0 0 * * * /opt/python/current/app/cron.sh
-
-This assumes that you have this application installed in the path `/opt/python/current/app` and that you have a virtualenv created for the project, with requirements installed, located in `/opt/python/run/venv`.
-
-Uncomment the first line of the `crontab.backup` file and change the email address there if you want the cron job output to be emailed somewhere automatically.
-
-Import the crontab configuration with:
-
-    crontab crontab.backup 
+* How to set up from scratch
+* How to use RDS
+* How to schedule nightly run of scraper.py through Elastic Beanstalk
